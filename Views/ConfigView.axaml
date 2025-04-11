@@ -1,0 +1,129 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i18N="clr-namespace:I18N.Avalonia.ReactiveUi;assembly=I18N.Avalonia.ReactiveUi"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+             xmlns:vm="clr-namespace:Lunaqua.ViewModels"
+             xmlns:components="clr-namespace:Lunaqua.Components"
+             mc:Ignorable="d"
+             d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Lunaqua.Views.ConfigView"
+             DataContext="{Binding Config,Source={StaticResource Locator}}">
+
+    <Design.DataContext>
+        <vm:ConfigViewModel />
+    </Design.DataContext>
+
+    <components:RotatableContentControl>
+        <components:RotatableContentControl.LandscapeContent>
+            <Grid RowDefinitions="2*,2*,2*,*,7*,*">
+                <Grid Grid.Row="1">
+                    <Grid ColumnDefinitions="*,3*,*,10*,*">
+                        <TextBlock Grid.Column="1" Text="{i18N:ReactiveUiLocalization AppLang}"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold" TextAlignment="Left" />
+                        <ComboBox Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Languages}" SelectedItem="{Binding CurrentLanguageEnum}" />
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid ColumnDefinitions="*,3*,*,10*,*">
+                        <TextBlock Grid.Column="1" Text="{i18N:ReactiveUiLocalization AppTheme}"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold" TextAlignment="Left" />
+                        <ComboBox Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Themes}" SelectedItem="{Binding CurrentAppTheme}" />
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="4" ColumnDefinitions="*,15*,*">
+                    <Border Grid.Column="1" Background="{DynamicResource MenuFlyoutPresenterBackground}"
+                            CornerRadius="10">
+                        <Grid RowDefinitions="5*,*,20*" ColumnDefinitions="*,50*,*" Margin="10">
+                            <Grid Grid.Column="0" ColumnSpan="3" Grid.Row="0" ColumnDefinitions="4*,*,60*">
+                                <fluent:SymbolIcon Grid.Column="0" Symbol="Info" FontSize="30" />
+                                <TextBlock Grid.Column="2" Text="{i18N:ReactiveUiLocalization About}"
+                                           VerticalAlignment="Center" FontSize="25" FontWeight="SemiBold" />
+                            </Grid>
+                            <Grid Grid.Column="1" Grid.Row="2" RowDefinitions="*,8*,*,8*,*,8*,*">
+                                <TextBlock Grid.Row="1" Text="@Moncak 2025, Lunaqua" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="3" Text="{i18N:ReactiveUiLocalization Credits}"
+                                           VerticalAlignment="Center" />
+                                <Grid Grid.Row="5" ColumnDefinitions="*,*,*,*">
+                                    <TextBlock Grid.Column="0" Text="Avalonia" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="FluentAvaloniaUI" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text="FluentIcons" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="3" Text="Avalonia I18N" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </components:RotatableContentControl.LandscapeContent>
+        <components:RotatableContentControl.PortraitContent>
+            <Grid RowDefinitions="2*,2*,2*,*,5*,*">
+                <Grid Grid.Row="1">
+                    <Grid ColumnDefinitions="*,3*,*,10*,*">
+                        <TextBlock Grid.Column="1" Text="{i18N:ReactiveUiLocalization AppLang}"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold" TextAlignment="Left" />
+                        <ComboBox Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Languages}" SelectedItem="{Binding CurrentLanguageEnum}" />
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid ColumnDefinitions="*,3*,*,10*,*">
+                        <TextBlock Grid.Column="1" Text="{i18N:ReactiveUiLocalization AppTheme}"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold" TextAlignment="Left" />
+                        <ComboBox Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding Themes}" SelectedItem="{Binding CurrentAppTheme}" />
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="4" ColumnDefinitions="*,15*,*">
+                    <Border Grid.Column="1" Background="{DynamicResource MenuFlyoutPresenterBackground}"
+                            CornerRadius="10">
+                        <Grid RowDefinitions="5*,*,20*" ColumnDefinitions="*,50*,*" Margin="10"
+                              ShowGridLines="True">
+                            <Grid Grid.Column="0" ColumnSpan="3" Grid.Row="0" ColumnDefinitions="4*,*,30*">
+                                <fluent:SymbolIcon Grid.Column="0" Symbol="Info" FontSize="30" />
+                                <TextBlock Grid.Column="2" Text="{i18N:ReactiveUiLocalization About}"
+                                           VerticalAlignment="Center" FontSize="25" FontWeight="SemiBold" />
+                            </Grid>
+                            <Grid Grid.Column="1" Grid.Row="2" RowDefinitions="*,8*,*,8*,*,8*,*">
+                                <TextBlock Grid.Row="1" Text="@BiDuang 2025, Lunaqua" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="3" Text="{i18N:ReactiveUiLocalization Credits}"
+                                           VerticalAlignment="Center" />
+                                <Grid Grid.Row="5" ColumnDefinitions="6*,*,10*,*,7*,*,8*" ShowGridLines="True">
+                                    <Viewbox Grid.Column="0">
+                                        <TextBlock Text="Avalonia" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="2">
+                                        <TextBlock Text="FluentAvaloniaUI" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="4">
+                                        <TextBlock Text="FluentIcons" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="6">
+                                        <TextBlock Text="Avalonia I18N" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                    </Viewbox>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </components:RotatableContentControl.PortraitContent>
+    </components:RotatableContentControl>
+</UserControl>

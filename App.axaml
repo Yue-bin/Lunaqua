@@ -2,14 +2,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Lunaqua.App"
              xmlns:local="using:Lunaqua"
+             xmlns:cov="using:Lunaqua.Converters"
+             xmlns:sty="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-  
+    <Application.Resources>
+        <local:ViewModelLocator x:Key="Locator" />
+        <cov:I18NConverter x:Key="I18NConverter" />
+    </Application.Resources>
+
     <Application.Styles>
+        <sty:FluentAvaloniaTheme />
         <FluentTheme />
     </Application.Styles>
 </Application>

@@ -1,31 +1,35 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Microsoft.Extensions.DependencyInjection;
+using Lunaqua.Services;
 using Lunaqua.ViewModels;
 
 namespace Lunaqua;
 
-public class ViewLocator : IDataTemplate
+public class ViewModelLocator
 {
+    public static ViewModelLocator Instance { get; private set; } = null!;
+    public IServiceProvider Provider { get; }
 
-    public Control? Build(object? param)
+    public MainViewModel MainView => Provider.GetRequiredService<MainViewModel>();
+    public ConfigViewModel Config => Provider.GetRequiredService<ConfigViewModel>();
+
+    public ViewModelLocator()
     {
-        if (param is null)
-            return null;
-        
-        var name = param.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
-        var type = Type.GetType(name);
+        Provider = ConfigureServices();
 
-        if (type != null)
-        {
-            return (Control)Activator.CreateInstance(type)!;
-        }
-        
-        return new TextBlock { Text = "Not Found: " + name };
+        Instance = this;
     }
 
-    public bool Match(object? data)
+    private IServiceProvider ConfigureServices()
     {
-        return data is ViewModelBase;
+        var container = new ServiceCollection();
+        container.AddSingleton<NavigationService>();
+
+        container.AddScoped<MainViewModel>();
+        container.AddScoped<ConfigViewModel>();
+
+        return container.BuildServiceProvider();
     }
 }

@@ -1,0 +1,17 @@
+﻿<ContentControl xmlns="https://github.com/avaloniaui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                x:Class="Lunaqua.Components.RotatableContentControl"
+                xmlns:controls="clr-namespace:Lunaqua.Components">
+    <ContentControl.Styles>
+        <Style Selector="controls|RotatableContentControl">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Panel>
+                        <ContentControl Content="{TemplateBinding LandscapeContent}" />
+                        <ContentControl Content="{TemplateBinding PortraitContent}" />
+                    </Panel>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </ContentControl.Styles>
+</ContentControl>
