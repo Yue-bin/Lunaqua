@@ -10,5 +10,40 @@ namespace Lunaqua.ViewModels;
 
 public class PluginViewModel : ViewModelBase
 {
+    private ObservableCollection<Plugin> _plugins = [];
+    public void LoadPlugins()
+    {
+        // This method would typically load plugins from a directory or a database
+        // For this example, we'll just create some sample data
 
+        // Sample data for plugins
+        _plugins = new ObservableCollection<Plugin>();
+        for (var i = 0; i < 10; i++)
+        {
+            _plugins.Add(new Plugin
+            {
+                Name = $"Plugin {i + 1}",
+                Description = $"Description for Plugin {i + 1}",
+                Author = $"Author {i + 1}",
+                Version = $"1.0.{i + 1}",
+                Path = $"/path/to/plugin{i + 1}.dll",
+                IsEnabled = true,
+                IsInstalled = true,
+                IsUpdateAvailable = false
+            });
+        }
+    }
+
+    public ObservableCollection<Plugin> Plugins
+    {
+        get => _plugins;
+        set => this.RaiseAndSetIfChanged(ref _plugins, value);
+    }
+
+
+    public PluginViewModel()
+    {
+        // Initialize the plugins collection with some sample data
+        LoadPlugins();
+    }
 }

@@ -3,13 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Lunaqua.ViewModels"
+             xmlns:models="clr-namespace:Lunaqua.Models"
              xmlns:components="clr-namespace:Lunaqua.Components"
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:i18N="clr-namespace:I18N.Avalonia.ReactiveUi;assembly=I18N.Avalonia.ReactiveUi"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Lunaqua.Views.PluginView">
-    <Grid RowDefinitions="*,10*"
-          ShowGridLines="True">
+             x:Class="Lunaqua.Views.PluginView"
+             DataContext="{Binding Plugin,Source={StaticResource Locator}}">
+    <Grid RowDefinitions="*,10*">
         <Grid ColumnDefinitions="*,10*,*"
               Grid.Row="0"
               ShowGridLines="True">
@@ -22,9 +23,9 @@
         </Grid>
         <ScrollViewer Grid.Row="1"
                       AllowAutoHide="True">
-            <ItemsControl Items="{Binding Plugins}">
+            <ItemsControl ItemsSource="{Binding Plugins}">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="models:Plugin">
                         <components:PluginItem />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

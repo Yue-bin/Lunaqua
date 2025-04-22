@@ -14,6 +14,7 @@ public class ViewModelLocator
 
     public MainViewModel MainView => Provider.GetRequiredService<MainViewModel>();
     public ConfigViewModel Config => Provider.GetRequiredService<ConfigViewModel>();
+    public PluginViewModel Plugin => Provider.GetRequiredService<PluginViewModel>();
 
     public ViewModelLocator()
     {
@@ -29,6 +30,7 @@ public class ViewModelLocator
 
         container.AddScoped<MainViewModel>();
         container.AddScoped<ConfigViewModel>();
+        container.AddScoped<PluginViewModel>();
 
         return container.BuildServiceProvider();
     }
