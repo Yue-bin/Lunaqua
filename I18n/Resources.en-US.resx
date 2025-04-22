@@ -135,4 +135,10 @@
   <data name="Credits" xml:space="preserve">
     <value>Powered by the following open-source components:</value>
   </data>
+  <data name="Plugins" xml:space="preserve">
+    <value>Plugins</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
 </root>

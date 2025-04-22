@@ -135,4 +135,9 @@
   <data name="Credits" xml:space="preserve">
     <value>采用了以下开源组件:</value>
   </data>
+  <data name="Plugins" xml:space="preserve">
+    <value>插件</value>
+  </data><data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
 </root>

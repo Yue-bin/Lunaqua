@@ -34,6 +34,14 @@
                         </ui:NavigationViewItem.IconSource>
                     </ui:NavigationViewItem>
                 </ui:NavigationView.MenuItems>
+                <ui:NavigationView.MenuItems>
+                    <ui:NavigationViewItem Content="{i18N:ReactiveUiLocalization Plugins}"
+                                           Tag="{x:Type views:PluginView}">
+                        <ui:NavigationViewItem.IconSource>
+                            <fluent:SymbolIconSource Symbol="PuzzlePiece" />
+                        </ui:NavigationViewItem.IconSource>
+                    </ui:NavigationViewItem>
+                </ui:NavigationView.MenuItems>
                 <ui:NavigationView.FooterMenuItems>
                     <ui:NavigationViewItem Content="{i18N:ReactiveUiLocalization Config}"
                                            Tag="{x:Type views:ConfigView}">
