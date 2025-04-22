@@ -413,3 +413,5 @@ FodyWeavers.xsd
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,visualstudiocode
+
+Config.json
