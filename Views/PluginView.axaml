@@ -9,11 +9,11 @@
              xmlns:i18N="clr-namespace:I18N.Avalonia.ReactiveUi;assembly=I18N.Avalonia.ReactiveUi"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Lunaqua.Views.PluginView"
-             DataContext="{Binding Plugin,Source={StaticResource Locator}}">
+             DataContext="{Binding Plugin,Source={StaticResource Locator}}"
+             BorderBrush="{DynamicResource ApplicationPageBackgroundThemeBrush}">
     <Grid RowDefinitions="*,10*">
         <Grid ColumnDefinitions="*,10*,*"
-              Grid.Row="0"
-              ShowGridLines="True">
+              Grid.Row="0">
                 <TextBox Margin="3 5"
                          Grid.Column="1"
                          TextAlignment="Left"

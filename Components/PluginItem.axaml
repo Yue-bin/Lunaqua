@@ -2,35 +2,71 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i18N="clr-namespace:I18N.Avalonia.ReactiveUi;assembly=I18N.Avalonia.ReactiveUi"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
+             xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:models="clr-namespace:Lunaqua.Models"
              mc:Ignorable="d"
              d:DesignWidth="300"
              x:Class="Lunaqua.Components.PluginItem">
-    
-    <Border CornerRadius="8"
-            Background="#202020"
-            Padding="15"
-            Margin="5">
-        <StackPanel Spacing="10">
-            <!-- 插件名称 -->
+
+    <!-- 使用 Border 实现卡片效果 -->
+    <Border Margin="5"
+            Padding="16"
+            CornerRadius="4"
+            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+            BoxShadow="0 1 2 0 #03000000, 0 1 6 0 #02000000, 0 2 4 0 #02000000">
+        <StackPanel Spacing="8">
+            <!-- 标题 -->
             <TextBlock Text="{Binding Name}"
                        FontSize="16"
-                       FontWeight="Bold"
-                       Foreground="White"/>
-            
-            <!-- 版本和作者 -->
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+
+            <!-- 元数据行 -->
             <StackPanel Orientation="Horizontal"
-                        Spacing="10">
+                        Spacing="8"
+                        VerticalAlignment="Center">
                 <TextBlock Text="{Binding Version}"
-                           Foreground="#A0A0A0"/>
+                           FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                
+                <!-- 分隔线 -->
+                <Rectangle Width="1"
+                           Height="12"
+                           Margin="0 0 4 0"
+                           Fill="{DynamicResource TextFillColorTertiaryBrush}"/>
+                
                 <TextBlock Text="{Binding Author}"
-                           Foreground="#A0A0A0"/>
+                           FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
-            
+
             <!-- 描述 -->
             <TextBlock Text="{Binding Description}"
+                       FontSize="14"
                        TextWrapping="Wrap"
-                       Foreground="#C0C0C0"/>
+                       LineHeight="20"
+                       MaxLines="3"
+                       TextTrimming="CharacterEllipsis"
+                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+
+            <!-- 打开按钮 -->
+            <SplitButton Content="内容"
+                         HorizontalAlignment="Right" >
+                <SplitButton.Flyout>
+                    <MenuFlyout Placement="Bottom">
+                        <MenuItem Header="项目1">
+                            <MenuItem Header="子项1" />
+                            <MenuItem Header="子项2" />
+                            <MenuItem Header="子项3" />
+                        </MenuItem>
+                        <MenuItem Header="项目2"/>
+                        <MenuItem Header="项目3" />
+                    </MenuFlyout>
+                </SplitButton.Flyout>
+            </SplitButton>
         </StackPanel>
     </Border>
 </UserControl>
