@@ -11,7 +11,9 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="Lunaqua"
         TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent">
+        Background="Transparent"
+        Width="800"
+        Height="450">
 
     <views:MainView />
 </Window>

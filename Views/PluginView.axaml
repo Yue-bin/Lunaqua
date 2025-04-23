@@ -11,6 +11,7 @@
              x:Class="Lunaqua.Views.PluginView"
              DataContext="{Binding Plugin,Source={StaticResource Locator}}"
              BorderBrush="{DynamicResource ApplicationPageBackgroundThemeBrush}">
+
     <Grid RowDefinitions="*,10*">
         <Grid ColumnDefinitions="*,10*,*"
               Grid.Row="0">

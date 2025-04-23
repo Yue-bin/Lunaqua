@@ -17,44 +17,53 @@
             CornerRadius="4"
             Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
             BoxShadow="0 1 2 0 #03000000, 0 1 6 0 #02000000, 0 2 4 0 #02000000">
-        <StackPanel Spacing="8">
-            <!-- 标题 -->
-            <TextBlock Text="{Binding Name}"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+        
+        <Grid RowDefinitions="*,Auto,*"
+              ColumnDefinitions="*,Auto" >
+            <StackPanel Spacing="8"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Grid.RowSpan="3">
+                <!-- 标题 -->
+                <TextBlock Text="{Binding Name}"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
 
-            <!-- 元数据行 -->
-            <StackPanel Orientation="Horizontal"
-                        Spacing="8"
-                        VerticalAlignment="Center">
-                <TextBlock Text="{Binding Version}"
-                           FontSize="12"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                
-                <!-- 分隔线 -->
-                <Rectangle Width="1"
-                           Height="12"
-                           Margin="0 0 4 0"
-                           Fill="{DynamicResource TextFillColorTertiaryBrush}"/>
-                
-                <TextBlock Text="{Binding Author}"
-                           FontSize="12"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                <!-- 元数据行 -->
+                <StackPanel Orientation="Horizontal"
+                            Spacing="8"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Version}"
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+
+                    <!-- 分隔线 -->
+                    <Rectangle Width="1"
+                            Height="12"
+                            Margin="0 0 4 0"
+                            Fill="{DynamicResource TextFillColorTertiaryBrush}"/>
+
+                    <TextBlock Text="{Binding Author}"
+                            FontSize="12"
+                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                </StackPanel>
+
+                <!-- 描述 -->
+                <TextBlock Text="{Binding Description}"
+                        FontSize="14"
+                        TextWrapping="Wrap"
+                        LineHeight="20"
+                        MaxLines="3"
+                        TextTrimming="CharacterEllipsis"
+                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
             </StackPanel>
-
-            <!-- 描述 -->
-            <TextBlock Text="{Binding Description}"
-                       FontSize="14"
-                       TextWrapping="Wrap"
-                       LineHeight="20"
-                       MaxLines="3"
-                       TextTrimming="CharacterEllipsis"
-                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-
             <!-- 打开按钮 -->
             <SplitButton Content="内容"
-                         HorizontalAlignment="Right" >
+                        HorizontalAlignment="Right"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Background="{DynamicResource AccentFillColorPrimary}">
                 <SplitButton.Flyout>
                     <MenuFlyout Placement="Bottom">
                         <MenuItem Header="项目1">
@@ -67,6 +76,6 @@
                     </MenuFlyout>
                 </SplitButton.Flyout>
             </SplitButton>
-        </StackPanel>
+        </Grid>
     </Border>
 </UserControl>
