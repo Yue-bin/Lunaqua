@@ -32,6 +32,7 @@ public class PluginViewModel : ViewModelBase
                 IsUpdateAvailable = false
             });
         }
+        _selectedPlugin = _plugins[0]; // Select the first plugin by default
     }
 
     public ObservableCollection<Plugin> Plugins
@@ -40,6 +41,7 @@ public class PluginViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _plugins, value);
     }
 
+    static public Plugin _selectedPlugin;
 
     public PluginViewModel()
     {
