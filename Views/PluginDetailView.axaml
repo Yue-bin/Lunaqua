@@ -5,13 +5,13 @@
              xmlns:vm="clr-namespace:Lunaqua.ViewModels"
              x:Class="Lunaqua.Views.PluginDetailView">
     <Design.DataContext>
-        <vm:PluginDetailViewModel/>
+        <vm:PluginViewModel/>
     </Design.DataContext>
 
   <ScrollViewer Margin="20">
     <StackPanel Spacing="15">
       <!-- 标题部分 -->
-      <TextBlock Text="{Binding Plugin.Name}" 
+      <TextBlock Text="{Binding SelectedPlugin.Name}" 
                  FontSize="24"
                  FontWeight="Bold"
                  Margin="0 0 0 10"/>
@@ -19,14 +19,14 @@
       <!-- 状态指示 -->
       <StackPanel Orientation="Horizontal" Spacing="15">
         <CheckBox Content="已启用" 
-                  IsChecked="{Binding Plugin.IsEnabled, Mode=TwoWay}"
-                  IsVisible="{Binding Plugin.IsInstalled}"
+                  IsChecked="{Binding SelectedPlugin.IsEnabled, Mode=TwoWay}"
+                  IsVisible="{Binding SelectedPlugin.IsInstalled}"
                   Margin="0 0 10 0"/>
         
         <Border Background="{DynamicResource SuccessBrush}" 
                  CornerRadius="3"
                  Padding="5 2"
-                 IsVisible="{Binding Plugin.IsUpdateAvailable}">
+                 IsVisible="{Binding SelectedPlugin.IsUpdateAvailable}">
           <TextBlock Text="有可用更新" 
                      Foreground="White"
                      FontSize="12"/>
@@ -36,22 +36,22 @@
       <!-- 基本信息 -->
       <Grid ColumnDefinitions="Auto,1*" RowDefinitions="auto,auto,auto,auto,auto">
         <TextBlock Grid.Row="0" Grid.Column="0" Text="版本：" Margin="0 0 10 5"/>
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Plugin.Version}" 
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPlugin.Version}" 
                    Foreground="#666"/>
         
         <TextBlock Grid.Row="1" Grid.Column="0" Text="作者：" Margin="0 0 10 5"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Plugin.Author}" 
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedPlugin.Author}" 
                    Foreground="#666"/>
         
         <TextBlock Grid.Row="2" Grid.Column="0" Text="路径：" Margin="0 0 10 5"/>
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Plugin.Path}" 
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedPlugin.Path}" 
                    TextWrapping="Wrap"
                    Foreground="#666"/>
         
         <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 10"/>
         
         <TextBlock Grid.Row="4" Grid.Column="0" Text="描述：" Margin="0 10 10 0"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Plugin.Description}" 
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding SelectedPlugin.Description}" 
                    TextWrapping="Wrap"
                    Margin="0 10 0 0"/>
       </Grid>
@@ -60,19 +60,19 @@
       <StackPanel Orientation="Horizontal" Spacing="10" Margin="0 20 0 0">
         <Button Content="安装插件" 
                 Command="{Binding InstallCommand}"
-                IsVisible="{Binding !Plugin.IsInstalled}"
+                IsVisible="{Binding !SelectedPlugin.IsInstalled}"
                 Padding="15 5"/>
         
         <Button Content="更新插件" 
                 Command="{Binding UpdateCommand}"
-                IsVisible="{Binding Plugin.IsUpdateAvailable}"
+                IsVisible="{Binding SelectedPlugin.IsUpdateAvailable}"
                 Padding="15 5"
                 Background="{DynamicResource AccentBrush}"
                 Foreground="White"/>
         
         <Button Content="卸载插件" 
                 Command="{Binding UninstallCommand}"
-                IsVisible="{Binding Plugin.IsInstalled}"
+                IsVisible="{Binding SelectedPlugin.IsInstalled}"
                 Padding="15 5"
                 Background="#dc3545"
                 Foreground="White"/>

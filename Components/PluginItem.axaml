@@ -7,12 +7,16 @@
              xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
              xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
              xmlns:models="clr-namespace:Lunaqua.Models"
+             xmlns:vm="clr-namespace:Lunaqua.ViewModels"
+             xmlns:views="clr-namespace:Lunaqua.Views"
              mc:Ignorable="d"
              d:DesignWidth="300"
              x:Class="Lunaqua.Components.PluginItem">
+      
 
     <!-- 使用 Border 实现卡片效果 -->
     <Border Margin="5"
+            Name="PluginItemCard"
             Padding="16"
             CornerRadius="4"
             Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
@@ -59,11 +63,14 @@
                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
             </StackPanel>
             <!-- 打开按钮 -->
-            <SplitButton Content="内容"
+            <SplitButton Content="详情"
                         HorizontalAlignment="Right"
                         Grid.Column="1"
                         Grid.Row="1"
-                        Background="{DynamicResource AccentFillColorPrimary}">
+                        Background="{DynamicResource AccentFillColorPrimary}"
+                        Command="{Binding DataContext.OpenPluginCommand, 
+                                          RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding}">
                 <SplitButton.Flyout>
                     <MenuFlyout Placement="Bottom">
                         <MenuItem Header="项目1">

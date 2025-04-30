@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using Lunaqua.Converters;
 using Lunaqua.Models;
 using Lunaqua.Services;
+using System.Windows.Input;
+using System.Diagnostics;
 
 namespace Lunaqua.ViewModels;
 
@@ -41,7 +43,34 @@ public class PluginViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _plugins, value);
     }
 
-    static public Plugin _selectedPlugin;
+    private Plugin? _selectedPlugin;
+    public Plugin? SelectedPlugin
+    {
+        get => _selectedPlugin;
+        set => this.RaiseAndSetIfChanged(ref _selectedPlugin, value);
+    }
+
+    private bool isPaneOpen = false;
+    public bool IsPaneOpen
+    {
+        get => isPaneOpen;
+        set => this.RaiseAndSetIfChanged(ref isPaneOpen, value);
+    }
+
+    private void OpenPlugin(Plugin plugin)
+    {
+        Debug.WriteLine($"Opening plugin: {plugin.Name}");
+        SelectedPlugin = plugin;
+        IsPaneOpen = true; // Open the details pane when a plugin is selected
+    }
+    public ICommand OpenPluginCommand => ReactiveCommand.Create<Plugin>(OpenPlugin);
+
+    private string? _searchString;
+    public string? SearchString
+    {
+        get => _searchString;
+        set => this.RaiseAndSetIfChanged(ref _searchString, value);
+    }
 
     public PluginViewModel()
     {

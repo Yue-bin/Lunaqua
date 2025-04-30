@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Logging;
 using Avalonia.ReactiveUI;
 using System;
 

@@ -71,3 +71,28 @@ public static class LanguageConverter
         };
     }
 }
+
+public class MathConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is double input && parameter is string expression)
+        {
+            try
+            {
+                // 支持动态表达式，例如 "0.8" 或 "Width*0.7"
+                return input * System.Convert.ToDouble(expression);
+            }
+            catch
+            {
+                return 0; // 返回安全值
+            }
+        }
+        return 0;
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}

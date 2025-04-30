@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Lunaqua.ViewModels"
-            xmlns:views="using:Lunaqua.Views"
+             xmlns:views="using:Lunaqua.Views"
              xmlns:models="clr-namespace:Lunaqua.Models"
              xmlns:components="clr-namespace:Lunaqua.Components"
              xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
@@ -13,11 +13,13 @@
              DataContext="{Binding Plugin,Source={StaticResource Locator}}"
              BorderBrush="{DynamicResource ApplicationPageBackgroundThemeBrush}">
 
-    <SplitView IsPaneOpen="True"
+    <SplitView IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}"
             DisplayMode="Overlay"
             PanePlacement="Right"
             BorderBrush="{DynamicResource ApplicationPageBackgroundThemeBrush}"
-            OpenPaneLength="{Binding #LunaquaWindow.Width} * 0.7">
+            OpenPaneLength="{Binding $parent[Window].Width,
+                                     Converter={StaticResource MathConverter},
+                                     ConverterParameter=0.6}">
         <SplitView.Pane>
             <views:PluginDetailView />
         </SplitView.Pane>

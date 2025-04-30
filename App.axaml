@@ -10,6 +10,7 @@
     <Application.Resources>
         <local:ViewModelLocator x:Key="Locator" />
         <cov:I18NConverter x:Key="I18NConverter" />
+        <cov:MathConverter x:Key="MathConverter" />
     </Application.Resources>
 
     <Application.Styles>
