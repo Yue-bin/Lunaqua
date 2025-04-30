@@ -10,7 +10,7 @@
         x:Name="LunaquaWindow"
         x:DataType="vm:ThemeViewModel"
         RequestedThemeVariant="{Binding CurrentTheme}"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/lunaqua-logo-main.png"
         Title="Lunaqua"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"

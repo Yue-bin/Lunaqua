@@ -137,7 +137,11 @@
   </data>
   <data name="Plugins" xml:space="preserve">
     <value>插件</value>
-  </data><data name="Search" xml:space="preserve">
+  </data>
+  <data name="Search" xml:space="preserve">
     <value>搜索</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>通用</value>
   </data>
 </root>
