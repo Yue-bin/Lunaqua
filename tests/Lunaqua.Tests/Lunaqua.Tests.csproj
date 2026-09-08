@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>Lunaqua.Tests</RootNamespace>
+    <AssemblyName>Lunaqua.Tests</AssemblyName>
+    <!-- xUnit v3 走 Microsoft.Testing.Platform，dotnet test 直接可用 -->
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 必须与 Avalonia.Headless.XUnit 12.1.2 依赖的 xunit.v3.extensibility.core 3.2.2 对齐；
+         xunit.v3 4.0.0 改了 TestIntrospectionHelper 签名，[AvaloniaFact] 会在发现阶段 MissingMethodException -->
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <PackageReference Include="Avalonia.Headless.XUnit" Version="12.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Lunaqua\Lunaqua.csproj" />
+  </ItemGroup>
+
+</Project>
