@@ -107,6 +107,26 @@ async Task<string?> FetchReadme(string repo)
     return null;
 }
 
+async Task<string?> FetchGithubReadme(string id)
+{
+    var dot = id.IndexOf('.');
+    if (dot <= 0) return null;
+    var owner = id[..dot];
+    var repo = id[(dot + 1)..];
+    foreach (var r in new[] { repo, id })
+    foreach (var b in new[] { "master", "main" })
+    foreach (var f in new[] { "README.md", "readme.md" })
+    {
+        try
+        {
+            var resp = await http.GetAsync($"https://raw.githubusercontent.com/{owner}/{r}/{b}/{f}");
+            if (resp.IsSuccessStatusCode) return await resp.Content.ReadAsStringAsync();
+        }
+        catch { }
+    }
+    return null;
+}
+
 async Task<List<string>> OrgRepos()
 {
     var list = new List<string>();
@@ -248,7 +268,22 @@ foreach (var dir in modDirs)
 
     var readmeRepo = repos.FirstOrDefault(r => r.Equals(dir, StringComparison.OrdinalIgnoreCase))
         ?? repos.FirstOrDefault(r => r.Contains(dir, StringComparison.OrdinalIgnoreCase) || dir.Contains(r, StringComparison.OrdinalIgnoreCase));
-    var readme = readmeRepo is null ? null : await FetchReadme(readmeRepo);
+    string? readme = readmeRepo is null ? null : await FetchReadme(readmeRepo);
+    string? readmeSource = readme is null ? null : $"Gitea/{readmeRepo}";
+    if (readme is null)
+    {
+        readme = await FetchGithubReadme(dir);
+        if (readme is not null) readmeSource = "GitHub";
+    }
+    if (readme is null)
+    {
+        var rf = entries.FirstOrDefault(e => Regex.IsMatch(e!["name"]!.GetValue<string>()!, @"^readme\.md$", RegexOptions.IgnoreCase));
+        if (rf is not null)
+        {
+            var rb = await Download($"/{dir}/{rf["name"]!.GetValue<string>()}");
+            if (rb is not null) { readme = Encoding.UTF8.GetString(rb); readmeSource = "站点内 readme.md"; }
+        }
+    }
     if (readme is null) modWarn.Add("未取到 readme（name/author/description/changelog 留空）");
     var changelogs = Changelogs(readme);
 
@@ -304,7 +339,7 @@ foreach (var dir in modDirs)
 
     summary.AppendLine($"## {dir}");
     summary.AppendLine($"- guid: {latestDll.Guid}｜latest: **{versions[0]}**｜版本数: {versions.Count}｜文件数: {fileRecords.Count}");
-    summary.AppendLine($"- 文案来源: {(readme is null ? "（缺 readme）" : readmeRepo)}");
+    summary.AppendLine($"- 文案来源: {readmeSource ?? "（缺 readme）"}");
     if (modWarn.Count > 0) { summary.AppendLine("- ⚠ 需人工确认："); foreach (var w in modWarn) summary.AppendLine($"  - {w}"); }
     else summary.AppendLine("- ✅ 无警告");
     summary.AppendLine();

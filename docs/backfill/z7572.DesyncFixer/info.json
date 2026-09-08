@@ -3,9 +3,9 @@
   "id": "z7572.DesyncFixer",
   "type": "bepinex",
   "guid": "z7572.DesyncFixer",
-  "name": "DesyncFixer",
+  "name": "z7572.DesyncFixer",
   "author": "",
-  "description": "",
+  "description": "修复地图/物体消失bug、防止箱子、平台、炸药桶、激光等网络同步物体的位置变成NaN、卡顿时，物体的位置也会卡顿而不是直接消失、较为有效地防止了因为一直NaN运算而导致的游戏崩溃",
   "latest": "1.1.0",
   "dependencies": [],
   "versions": [
@@ -18,7 +18,8 @@
           "sha256": "f0f5a599ad5de709aa63dde48c047f3d505fc90a5f476b3c4ccdc233b71e5a1f",
           "size": 10240
         }
-      ]
+      ],
+      "changelog": "1. 改名为DesyncFixer\n2. 修复Western4炸药桶不爆炸的bug（仅房主对房员生效）"
     }
   ]
 }

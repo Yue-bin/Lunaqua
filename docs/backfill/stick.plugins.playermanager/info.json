@@ -53,11 +53,6 @@
           "path": "stick.plugins.playermanager-v4.0.6.dll",
           "sha256": "3a00ee2b5221cef9c95392e4a5c18a891fee70f1619f917d19cb2800dafd4a46",
           "size": 36352
-        },
-        {
-          "path": "stick.plugins.playermanager-v4.0.7.dll",
-          "sha256": "e5f6b3cc3131bccf9a7c51a634d666ecce8a16dd2ebef896b680d9a7339f7121",
-          "size": 34816
         }
       ],
       "changelog": "1. 大厅搜索范围按钮现在可同步修改快速匹配的搜索范围\n2. 修复了禁音功能   *难道他真的是猪？？*"

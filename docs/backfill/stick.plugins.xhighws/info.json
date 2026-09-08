@@ -14,7 +14,7 @@
       "released": "2026-06-09T20:47:07.52+08:00",
       "files": [
         {
-          "path": "stick.plugins.xhighws-v1.0.0.dll",
+          "path": "stick.plugins.xhighws-v0.0.1.dll",
           "sha256": "d3584b8a8d7fb1599ff6ccc8b23096ac8750963ff5973d20396f8f0073a4a493",
           "size": 9216
         }
