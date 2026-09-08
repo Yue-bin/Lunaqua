@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Lunaqua.Models;
 using Lunaqua.Services;
+using Serilog;
 
 namespace Lunaqua.ViewModels;
 
@@ -84,7 +85,18 @@ public sealed partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     private async Task PickGameDirectoryAsync()
     {
-        var folder = await _dialogs.PickFolderAsync("选择「柴」的游戏目录", GameDirectory);
+        string? folder;
+        try
+        {
+            folder = await _dialogs.PickFolderAsync("选择「柴」的游戏目录", GameDirectory);
+        }
+        catch (Exception ex)
+        {
+            // 选择器不可用时别把异常甩到 UI 线程上
+            Log.Warning(ex, "打开目录选择器失败");
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(folder))
         {
             return;
