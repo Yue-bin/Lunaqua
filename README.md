@@ -10,8 +10,32 @@
 ## 状态
 
 - 技术栈：Avalonia 12.1.2 / .NET 10 / CommunityToolkit.Mvvm / FluentIcons / Serilog / MS.DI / Velopack
-- 进度：规格书定稿，尚未动工（M0 起步）
+- 进度：**M0 骨架完成**——DrawerPage 壳 + 首页 / Mod 库 / 代装 / 设置四个页面 + 设置持久化 + 文件日志 + 无头渲染测试（9/9 通过）
+- 下一步：**M1 站点与元数据**（OpenList 客户端、info.json 解析与校验、Mod 库列表/搜索/详情）
 - 开发辅助：`bash docs/tools/install-avalonia-skills.sh` 安装 Avalonia 12 skill 包（33 个）
+
+## 开发
+
+```bash
+dotnet build Lunaqua.sln           # 编译（警告即错误）
+dotnet run --project src/Lunaqua   # 运行
+dotnet test Lunaqua.sln            # 测试（xUnit v3 + Avalonia.Headless）
+```
+
+- 数据目录：`%LocalAppData%\Lunaqua`（环境变量 `LUNAQUA_DATA_DIR` 可覆盖，测试与便携用）
+- 设置：`%LocalAppData%\Lunaqua\settings.json`（原子写入：先写 .tmp 再替换）
+- 日志：`%LocalAppData%\Lunaqua\logs\lunaqua-<日期>.log`（按天滚动，保留 14 天）
+
+## 目录
+
+```
+src/Lunaqua/            应用（Views / ViewModels / Services / Models / Resources）
+tests/Lunaqua.Tests/    xUnit v3 + Avalonia.Headless 测试
+docs/spec/              规格书（唯一权威）
+docs/wayfinder/         地图 / 工单 / 调研
+docs/backfill/          存量 9 个 mod 的 info.json 草案
+docs/tools/             一次性工具（补录工具、skill 安装脚本）
+```
 
 ## 分支
 

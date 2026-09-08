@@ -85,3 +85,11 @@ blocked-by: []
 3. 每个依赖记录版本 + 许可，规格书里附本表。
 
 **未决：无。**
+
+## Amendment（2026-09-09，M0 实测）
+
+**测试依赖版本修正**：BOM 原写 `xUnit v3 4.0.0`，实测不兼容 —— `Avalonia.Headless.XUnit 12.1.2` 编译时依赖 `xunit.v3.extensibility.core 3.2.2`，升到 4.0.0 后 `TestIntrospectionHelper.GetTestCaseDetails` 签名变更，`[AvaloniaFact]` 在**发现阶段**就抛 `MissingMethodException`（9 个用例里 4 个直接 error）。
+
+- 裁决：`xunit.v3` 锁 **3.2.2**，与 Avalonia 无头集成对齐；其余测试栈不变（`Avalonia.Headless.XUnit 12.1.2`）。
+- 同时确认：.NET 10 的 `dotnet test` 必须走 Microsoft.Testing.Platform（仓库根 `dotnet.config` 已加），VSTest 目标在 .NET 10 SDK 被移除。
+- 规格书 §2 BOM 已同步改。

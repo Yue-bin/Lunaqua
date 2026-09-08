@@ -40,12 +40,14 @@
 | HTTP/JSON | **自研** HttpClient + System.Text.Json | — | — |
 | BepInEx .cfg 解析 | **自研**行式解析/写回 | — | — |
 | Steam 库定位 | **自研** KeyValues 解析（libraryfolders.vdf） | — | — |
-| 测试 | xUnit v3 + Avalonia.Headless.XUnit | 4.0.0 / 12.1.2 | Apache-2.0 / MIT |
+| 测试 | xUnit v3 + Avalonia.Headless.XUnit | **3.2.2** / 12.1.2 | Apache-2.0 / MIT |
 | 打包/自更新 | **Velopack** | 1.2.0 | MIT |
 
 **不用**：ReactiveUI、FluentAvalonia、AListSdkSharp、Flurl、Refit、Tomlyn、Svg.Skia、HotAvalonia、Avalonia.Xaml.Behaviors、MsgBox.Avalonia、I18N.Avalonia。
 
 **原则**：优先内置；新增依赖必须回到工单「决策：技术栈与依赖清单」追加裁决。
+
+> xUnit v3 锁 **3.2.2**（不是 4.0.0）：`Avalonia.Headless.XUnit 12.1.2` 依赖 `xunit.v3.extensibility.core 3.2.2`，升到 4.0.0 后 `[AvaloniaFact]` 在测试发现阶段抛 `MissingMethodException`（M0 实测）。
 
 > 依据：工单 13（BOM）、01（Avalonia 12 迁移注意点）、02（客户端选型）。
 
