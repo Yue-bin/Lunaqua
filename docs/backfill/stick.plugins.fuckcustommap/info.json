@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "stick.plugins.fuckcustommap",
+  "type": "bepinex",
+  "guid": "stick.plugins.fuckcustommap",
+  "name": "去他大爷的下载自定义地图",
+  "author": "",
+  "description": "阻止一次性下载过多的自定义地图",
+  "latest": "1.0.1",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "1.0.1",
+      "released": "2025-07-27T14:18:00.04+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.fuckcustommap-v1.0.1.dll",
+          "sha256": "9456d03f09e199bf42efe4d2e2b028d9e368ded676f9419195889e70597f8d2d",
+          "size": 7680
+        }
+      ],
+      "changelog": "1. 修复了文字无限显示和断连之后卡住的问题"
+    }
+  ]
+}

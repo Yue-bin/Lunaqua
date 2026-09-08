@@ -3,7 +3,7 @@
 - labels: wayfinder:map
 - tickets: 见下方「工单索引」
 - tracker: 本地 markdown（docs/wayfinder/）
-- 状态: **地图完成**（2026-09-09）——所有决策票关闭，规格书已交付；仅剩 task「补录存量 info.json」
+- 状态: **地图全部完成**（2026-09-09）——13 张工单全部关闭，规格书已交付，存量 info.json 草案已产出
 
 ## Destination
 
@@ -33,7 +33,7 @@
 | [决策：Lunaqua 自身分发与更新渠道](tickets/08-self-distribution.md) | grilling | ✅ closed | — |
 | [决策：技术栈与依赖清单（站长亲自审理）](tickets/13-tech-stack.md) | grilling | ✅ closed | — |
 | [汇总：重启规格书](tickets/09-spec-assembly.md) | task | ✅ closed | — |
-| [补录：存量 9 个 mod 的 info.json](tickets/10-legacy-backfill.md) | task | open | — |
+| [补录：存量 9 个 mod 的 info.json](tickets/10-legacy-backfill.md) | task | ✅ closed | — |
 | [调研：BepInEx 配置解析与配置编辑器](tickets/11-config-editor-research.md) | research | ✅ closed | — |
 | [决策：配置编辑器](tickets/12-config-editor.md) | grilling | ✅ closed | 11 |
 
@@ -41,6 +41,7 @@
 
 - [调研：OpenList 客户端与 API 能力](tickets/02-openlist-client-research.md): 自研 ~300 行 HttpClient 轻客户端，弃 AListSdkSharp；匿名只读三件套可用，无 /api/fs/read、无搜索索引、sign 每次会话重取，Range/ETag 支持断点与条件请求。
 - [调研：Avalonia 12 迁移与生态摸底](tickets/01-avalonia12-research.md): v2 上 Avalonia 12.1.2 + net10.0；官方 DrawerPage 取代 FluentAvalonia；编译绑定默认开启等注意点。（ReactiveUI 部分已被工单 13 作废 → 改用 CommunityToolkit.Mvvm）
+- [补录：存量 9 个 mod 的 info.json](tickets/10-legacy-backfill.md): 9 份 info.json 草案已生成（Y:\lunaqua-backfill + docs/backfill），工具 docs/tools/backfill；4 条待人工确认（两处文件名/内嵌版本不一致、DesyncFixer 无 readme、NaNFixer 需删）。
 - [汇总：重启规格书](tickets/09-spec-assembly.md): 规格书定稿于 `docs/spec/lunaqua-v2-spec.md`（单文件，含 BOM/元数据契约/架构/生命周期/代装/配置编辑器/IA/分发/里程碑 M0–M6/风险）。
 - [决策：Lunaqua 自身分发与更新渠道](tickets/08-self-distribution.md): 首发挂 OpenList 站 Lunaqua/ 目录（Setup.exe + readme，留 3 版）；自动更新走自建静态目录（Caddy，无 sign）+ Velopack SimpleWebSource；启动检查提示下载重启；Setup.exe 安装、单稳定通道；设置页「回退到上一版」；GitHub Actions tag 触发发布。
 - [决策：技术栈与依赖清单（站长亲自审理）](tickets/13-tech-stack.md): BOM 定稿——Avalonia 12.1.2/net10 + CommunityToolkit.Mvvm 8.4.2 + FluentIcons.Avalonia 2.1.339.1 + MS.DI 10 + Serilog + Mono.Cecil + 自研 HttpClient/.cfg 解析/KeyValues + xUnit v3 & Avalonia.Headless + Velopack 1.2.0；不用 ReactiveUI/FluentAvalonia/AListSdkSharp/Flurl/Refit/Tomlyn/Svg.Skia。

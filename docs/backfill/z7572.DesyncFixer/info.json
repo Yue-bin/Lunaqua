@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "z7572.DesyncFixer",
+  "type": "bepinex",
+  "guid": "z7572.DesyncFixer",
+  "name": "DesyncFixer",
+  "author": "",
+  "description": "",
+  "latest": "1.1.0",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "1.1.0",
+      "released": "2026-07-08T01:42:03.886+08:00",
+      "files": [
+        {
+          "path": "DesyncFixer-v1.1.0.dll",
+          "sha256": "f0f5a599ad5de709aa63dde48c047f3d505fc90a5f476b3c4ccdc233b71e5a1f",
+          "size": 10240
+        }
+      ]
+    }
+  ]
+}

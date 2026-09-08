@@ -1,0 +1,174 @@
+{
+  "schema": 1,
+  "id": "stick.plugins.playermanager",
+  "type": "bepinex",
+  "guid": "stick.plugins.playermanager",
+  "name": "玩家管理器",
+  "author": "老狼老狼几点钟、Moncak、z7572",
+  "description": "房间查找、转让房主、玩家记录、被记录的玩家显示为黄名",
+  "latest": "5.1.0",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "5.1.0",
+      "released": "2026-08-31T04:03:08.675+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v5.1.0.dll",
+          "sha256": "9f0c9890a573230ef8d956ec4096e9dc82f79e5489ec42f658ee27c3a7d972e0",
+          "size": 44544
+        }
+      ],
+      "changelog": "*有懂古法手搓的吗*  \n\n1. 添加了被kick提示\n2. 一些小重构和规范化"
+    },
+    {
+      "version": "5.0.0",
+      "released": "2026-08-21T02:21:34.432+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v5.0.0.dll",
+          "sha256": "423028e77e8c7b5e4f00f6a2913de925b6681a0814b1a7a20bf88371a9a840bd",
+          "size": 44032
+        }
+      ],
+      "changelog": "*来自月饼和她的蓝色大肥鱼*  \n\n1. GUI 改为随窗口分辨率等比缩放：以 2K（2560 宽）为基准与旧版尺寸一致（大厅列表约屏宽 1/5），新增 `GuiScale` 配置（0.5–2.0，约 1.22 即屏宽 1/4），左对齐窗口左侧 5px\n2. 新增右侧面板（仅大厅/房间外显示，右对齐-5px，高度横贯窗口）：上半部分为最近一起玩的玩家列表（长度 `RecentPlayersCount`，默认 20），行右侧固定加好友/记录/曾用名按钮\n3. 下半部分为记录名单/黑名单管理：顶部按钮切换名单，每行\"移除\"按钮两步确认（互斥：全局同时只有一个确认态），移除即写回文件\n4. 新增 `RecentPlayers.txt` 持久化最近共处记录（同房间共处即记录，按时间倒序）\n5. 侧边栏为内部区域，不开放组件注册；侧边栏复用的 widget 约定为\"大厅安全\"（Condition/OnClick 不依赖房间状态）\n6. 最近一起玩记录：离开大厅后重进同一房间会刷新共处时间；调小 `RecentPlayersCount` 后立即写盘裁剪\n7. 性能：大厅/名单/最近列表改为只绘制可见行，名字/好友状态/大厅人数增加 TTL 缓存；侧边栏宽度按内容反推（名字按钮 500 原宽），组件不再被挤压"
+    },
+    {
+      "version": "4.0.8",
+      "released": "2026-06-22T05:44:36.314+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v4.0.8.dll",
+          "sha256": "f9e76de2cf8b5d5cf4465421de3d3f9a635173b2e68dc35de9bbfca1eb4be8ce",
+          "size": 35840
+        }
+      ],
+      "changelog": "1. 添加了转让房主功能\n2. 现在如果某个按钮（行组件）对所有人都不显示，则不留空"
+    },
+    {
+      "version": "4.0.6",
+      "released": "2026-06-10T19:00:10.33+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v4.0.6.dll",
+          "sha256": "3a00ee2b5221cef9c95392e4a5c18a891fee70f1619f917d19cb2800dafd4a46",
+          "size": 36352
+        },
+        {
+          "path": "stick.plugins.playermanager-v4.0.7.dll",
+          "sha256": "e5f6b3cc3131bccf9a7c51a634d666ecce8a16dd2ebef896b680d9a7339f7121",
+          "size": 34816
+        }
+      ],
+      "changelog": "1. 大厅搜索范围按钮现在可同步修改快速匹配的搜索范围\n2. 修复了禁音功能   *难道他真的是猪？？*"
+    },
+    {
+      "version": "4.0.5",
+      "released": "2026-05-31T02:00:23.815+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v4.0.5.dll",
+          "sha256": "111c45984bc14805a31438a92a4e5ae2041c43b60a1e2551c092560b22c3613e",
+          "size": 33792
+        }
+      ],
+      "changelog": "1. 修复了加好友按钮始终不显示的问题   *难道他真的是猪？？*"
+    },
+    {
+      "version": "4.0.4",
+      "released": "2026-05-28T17:02:44.548+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v4.0.4.dll",
+          "sha256": "da0334250c3d76955b91d603d3389ca6b5902d49dea203153ad34930d2808230",
+          "size": 33792
+        }
+      ],
+      "changelog": "1. 房间列表现在在房间内也显示，但是点击无效\n2. 添加了加好友按钮\n3. 修复了禁音功能   *难道他真的是猪？？*"
+    },
+    {
+      "version": "4.0.3",
+      "released": "2026-05-08T17:42:23.165+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v4.0.3.dll",
+          "sha256": "810f4d2e92ae9b78b67af7f63c3b0e0540bf1f5ba30ec3f21a52a24d0ebfc8fd",
+          "size": 32256
+        }
+      ],
+      "changelog": "1. 静音单个玩家\n2. 性能优化\n3. 提供了更多可选是否开启功能显示的配置项\n4. 提供按钮组件注册入口\n5. 更好的房间公开性切换"
+    },
+    {
+      "version": "3.1.1",
+      "released": "2026-02-19T17:30:54.829+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v3.1.1.dll",
+          "sha256": "a622a5e1656ed9052dffccd84c84f48f6c4c95119fc8fae48e68f02787749358",
+          "size": 21504
+        }
+      ],
+      "changelog": "1. 添加了房间公开性切换功能\n2. 更改房间筛选条件现在会触发刷新列表\n3. 现在房间列表不会在房间内显示，防止误触导致的游戏状态不一致\n4. 一些重构和优化"
+    },
+    {
+      "version": "3.0.3",
+      "released": "2025-07-29T12:00:24.862+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v3.0.3.dll",
+          "sha256": "f2315e34ff4c899f290de3e9c84341f9c3e9e2e04721419a8f94cf5550bfd57a",
+          "size": 17920
+        }
+      ],
+      "changelog": "1. 修复了kick按钮无论如何都会显示的问题（难道他真的是猪？？？！！？）"
+    },
+    {
+      "version": "3.0.2",
+      "released": "2025-07-27T13:13:44.353+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v3.0.2.dll",
+          "sha256": "e9e378248128b905e8f4182a45fc6ba9a941799cfbb663ebfae9040f024f3f8e",
+          "size": 17920
+        }
+      ],
+      "changelog": "1. 修复了删除玩家记录时回写会导致所有记录的名字消失的问题\n\n*需要注意的是目前版本在重新记录玩家之后，曾用名会被现在的名字替换*"
+    },
+    {
+      "version": "3.0.1",
+      "released": "2025-07-27T11:52:28.499+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v3.0.1.dll",
+          "sha256": "cc20378a431892ad114a67dc516eb42c36ffaeae7a453319afd6ab93d3addaf3",
+          "size": 17920
+        }
+      ],
+      "changelog": "**存在较大问题请勿更新**  \n\n1. 修复了玩家记录不能被正确读取的问题\n2. 将每次绘制时获取玩家信息改为按需获取\n3. 将记录和拉黑合并为一个按钮\n4. 修复了显示曾用名不能正常工作的问题\n5. 删除了遗留的无用代码"
+    },
+    {
+      "version": "2.0.0",
+      "released": "2025-02-09T00:57:42.279+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v2.0.0.dll",
+          "sha256": "e889a6d5da381737944894341893f5ea13346be185774a8aa6ca6735b24ba1cd",
+          "size": 12288
+        }
+      ],
+      "changelog": "从老狼的新版源码改过来的插件，比上一版少了一些bug，而且现在可以使用配置文件\n\n在老狼的基础上加上了绿名和防踢开关的配置，以及一些日志\n\n从原来的插件迁移到这个版本不需要改变 `CustomPlayerRecord.txt`文件的位置，即保留在原来的 `...\\StickFightTheGame\\StickFight_Data`目录中\n\n~~某人终于想通了data目录就是用来存data的，反正没修改原有文件~~"
+    },
+    {
+      "version": "1.0.0",
+      "released": "2025-02-07T02:17:06.065+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.playermanager-v1.0.0.dll",
+          "sha256": "b486841ac456ace9f3b0748c8238e6cb7067c5887488a5cd825e5448604a95d8",
+          "size": 11776
+        }
+      ],
+      "changelog": "从原版直接使用反编译修改游戏转换到 `BepInEx`\n\n感谢老狼的原版插件\n\n旧版插件用户可以通过把 `...\\StickFightTheGame\\StickFight_Data`下的 `CustomPlayerRecord.txt`文件移动到 `...\\StickFightTheGame\\BepInEx\\config\\`目录来保留以前的记录"
+    }
+  ]
+}

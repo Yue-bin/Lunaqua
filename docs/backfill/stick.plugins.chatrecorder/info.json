@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "id": "stick.plugins.chatrecorder",
+  "type": "bepinex",
+  "guid": "stick.plugins.chatrecorder",
+  "name": "聊天记录",
+  "author": "",
+  "description": "把聊天记录保存到 ...\\StickFightTheGame\\BepInEx\\plugins\\ChatRecorder\\ChatRecord.txt（插件目录下的独立子目录，不再写入游戏数据目录）、按时间间隔自动轮换文件，避免单个文件无限增长、轮换后的文件命名：、每天 / 每周：ChatRecord-2024-01-08.txt（每周以周一为起点）",
+  "latest": "1.4.0",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "1.4.0",
+      "released": "2026-08-28T04:30:22.884+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.chatrecorder-v1.4.0.dll",
+          "sha256": "fa81e3ce58a710d31f25136ab97657e8061dd363f76a39612fd2863786360f4c",
+          "size": 19968
+        }
+      ],
+      "changelog": "- 新增左侧聊天历史面板：打开聊天输入框时显示，只读可滚动，新消息仅在面板贴底时自动跟随；面板只显示昵称与消息（时间戳与 SteamID 仍完整写入文件）\n- 面板贴屏幕左缘（宽 1/4 屏、高 1/2 屏、垂直居中），新增 `HistoryStickTimeout` 超时自动贴底（默认 10 秒）\n- 新增配置 `HistoryEnabled`（默认 true）控制历史面板开关，`HistoryMaxLines`（默认 50，`0` 表示不显示历史面板），历史内容跨轮换文件补齐"
+    },
+    {
+      "version": "1.2.0",
+      "released": "2025-02-11T21:08:16.568+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.chatrecorder-v1.2.0.dll",
+          "sha256": "ddd55e0f32a37c688a2cbad049897ed9ff4f6797648360a31cf6c75d2103d900",
+          "size": 7680
+        }
+      ],
+      "changelog": "限制最长单条消息为128个字符长度，否则会截断为128个字符"
+    },
+    {
+      "version": "1.1.0",
+      "released": "2025-02-11T18:20:20.671+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.chatrecorder-v1.1.0.dll",
+          "sha256": "1297f7ed84ad08558f60e1ef205749adc228ff5f38e2d6bdf2a8deaa2d03592d",
+          "size": 10752
+        }
+      ],
+      "changelog": "改为patch一个方法然后自行获取发送者"
+    },
+    {
+      "version": "1.0.3",
+      "released": "2025-02-11T02:55:44.79+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.chatrecorder-v1.0.3.dll",
+          "sha256": "ec73d5739ac5f4d1372fc38325ca67876254b60933395258314a4e350f71f389",
+          "size": 7168
+        }
+      ],
+      "changelog": "修补了四个方法的超级大坨插件，不建议使用，可能导致性能大幅下降"
+    }
+  ]
+}

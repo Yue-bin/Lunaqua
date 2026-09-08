@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "stick.plugins.onekey",
+  "type": "bepinex",
+  "guid": "stick.plugins.onekey",
+  "name": "一键XX",
+  "author": "",
+  "description": "可以把以下选项的切换绑定到自定义按键上：、主音量、音效音量、音乐音量",
+  "latest": "1.1.3",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "1.1.3",
+      "released": "2025-02-15T00:57:58.251+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.onekey-v1.1.3.dll",
+          "sha256": "ac681590fde90a289aff546d24aab58b22087616688fcd5e9b7529f474db52b5",
+          "size": 11776
+        }
+      ],
+      "changelog": "得益于懒得发开发者的超级大脑，我不得不修正了以下选项修改时提示的值：\n\n- 聊天\n- ping\n- 抗锯齿\n- 全屏\n\n因为懒得发莫名其妙在一部分选项中以1为假0为真，在此前版本中这些选项的更改提示是反的"
+    },
+    {
+      "version": "1.1.2",
+      "released": "2025-02-11T00:30:25.916+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.onekey-v.1.1.2.dll",
+          "sha256": "9b7f0a5b892bcc28269d5ed0778654673d06037480c0895d3d1f29013cc859cf",
+          "size": 11776
+        }
+      ],
+      "changelog": "这个版本是第一个真正能用的版本~~但是我一直默认他能用所以版本号正常地在迭代~~ \n\n删除了不可用的部分"
+    }
+  ]
+}

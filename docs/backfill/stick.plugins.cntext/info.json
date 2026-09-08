@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "id": "stick.plugins.cntext",
+  "type": "bepinex",
+  "guid": "stick.plugins.cntext",
+  "name": "中文显示名字",
+  "author": "",
+  "description": "让玩家名字中的非英文可以正确显示",
+  "latest": "1.0.3",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "1.0.3",
+      "released": "2026-07-31T17:57:39.821+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.cntext-v1.0.3.dll",
+          "sha256": "a624329f3151729a48e16f9de41638613717cdd09269e45a4afc6cb4fe28ea8a",
+          "size": 11776
+        },
+        {
+          "path": "StreamingAssets.zip",
+          "sha256": "3d594cd012f86f1822a4131376dcfd733fad91f344ab011caf7be5f436a12129",
+          "size": 9648394
+        }
+      ],
+      "changelog": "feat:\n\n- 加上了与z7572的汉化mod的不兼容标签，防止冲突"
+    },
+    {
+      "version": "1.0.2",
+      "released": "2025-07-27T14:51:20.883+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.cntext-1.0.2.dll",
+          "sha256": "2492e1a243410d5128161e4e2f5f4b0e20861f4b50a34363716e3ed7bd7e294d",
+          "size": 11776
+        }
+      ],
+      "changelog": "fix:\n\n- 标签解析，重构了标签转换器"
+    },
+    {
+      "version": "1.0.0",
+      "released": "2025-02-09T04:07:22.867+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.cntext-v1.0.0.dll",
+          "sha256": "48315f5631d37eb10fcb3f98e31f211eafb555ecf1e3d80f3b8cc3df97e2da5d",
+          "size": 8192
+        }
+      ],
+      "changelog": "把老狼的插件拆出来，顺便加上了老狼以前写的名字格式化使富文本支持单边标签"
+    }
+  ]
+}

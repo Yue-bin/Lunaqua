@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "id": "stick.plugins.xhighws",
+  "type": "bepinex",
+  "guid": "stick.plugins.xhighws",
+  "name": "stick.plugins.xhighws",
+  "author": "",
+  "description": "添加xhigh和max两档更高的刷枪频率",
+  "latest": "0.0.1",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "0.0.1",
+      "released": "2026-06-09T20:47:07.52+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.xhighws-v1.0.0.dll",
+          "sha256": "d3584b8a8d7fb1599ff6ccc8b23096ac8750963ff5973d20396f8f0073a4a493",
+          "size": 9216
+        }
+      ]
+    }
+  ]
+}

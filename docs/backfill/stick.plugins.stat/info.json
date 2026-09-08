@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "id": "stick.plugins.stat",
+  "type": "bepinex",
+  "guid": "stick.plugins.stat",
+  "name": "统计插件",
+  "author": "",
+  "description": "对以下数据进行记录：、dps、最高dps、局击杀数",
+  "latest": "1.2.1",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "1.2.1",
+      "released": "2025-02-11T03:04:45.689+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.stat-v1.2.1.dll",
+          "sha256": "0a5d5ce7b9bda09c0b76689430efa94e54048e6e6c84da9cad87f86441b75515",
+          "size": 10240
+        }
+      ],
+      "changelog": "修复了自定义文本不能正确显示的问题"
+    },
+    {
+      "version": "1.2.0",
+      "released": "2025-02-10T17:14:52.635+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.stat-v1.2.0.dll",
+          "sha256": "355693cf809372a3a2e7dc5beb61fc5b0d4ea4c9959d9a6b5c3b0a8816971cdc",
+          "size": 10240
+        }
+      ],
+      "changelog": "新增功能：\n\n- 可以在配置文件中自定义显示的文本"
+    },
+    {
+      "version": "1.1.0",
+      "released": "2025-02-09T06:39:44.794+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.stat-v1.1.0.dll",
+          "sha256": "e93ed7aeabbe39096624f63655046e2b054c9630195e58609459f0221541c3e1",
+          "size": 9728
+        }
+      ],
+      "changelog": "修复：\n\n- patch相关的几个问题，导致数据不变化\n\n- 判断条件全反，导致数据不变化\n\n更改：\n- 不再使用patch来触发局统计清零\n\n*中间还有仨小版本就不发了*"
+    },
+    {
+      "version": "1.0.0",
+      "released": "2025-02-09T05:39:01.341+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.stat-v1.0.0.dll",
+          "sha256": "106727c9eaafc066b9ed6ad32305f6210538ca5b5af9c40771ae254bcc426437",
+          "size": 9216
+        }
+      ],
+      "changelog": "把旧版迁移到`BepInEx`"
+    }
+  ]
+}

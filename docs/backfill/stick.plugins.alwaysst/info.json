@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "id": "stick.plugins.alwaysst",
+  "type": "bepinex",
+  "guid": "stick.plugins.alwaysst",
+  "name": "总是显示名字",
+  "author": "",
+  "description": "一直显示玩家的名字",
+  "latest": "1.0.1",
+  "dependencies": [],
+  "versions": [
+    {
+      "version": "1.0.1",
+      "released": "2026-01-31T19:19:47.985+08:00",
+      "files": [
+        {
+          "path": "stick.plugins.alwaysst-v1.0.1.dll",
+          "sha256": "66d6a52fa54ce769853369050a5e8237013b22682fca14bd8679e934fce37b0d",
+          "size": 6656
+        }
+      ],
+      "changelog": "基本可用"
+    }
+  ]
+}
