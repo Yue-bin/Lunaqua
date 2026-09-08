@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Headless;
@@ -33,7 +32,7 @@ public sealed class ShellTests
         Assert.Equal(760, frame.PixelSize.Height);
 
         // 空白帧也是「非 null」，所以按颜色数判定真的画出了东西
-        var colors = CountDistinctColors(frame);
+        var colors = TestImages.CountDistinctColors(frame);
         Assert.True(colors > 100, $"疑似空白帧：只有 {colors} 种颜色");
 
         var screenshot = Path.Combine(TestPaths.Root, "shell.png");
@@ -106,34 +105,10 @@ public sealed class ShellTests
         var frame = window.CaptureRenderedFrame();
 
         Assert.NotNull(frame);
-        var colors = CountDistinctColors(frame!);
+        var colors = TestImages.CountDistinctColors(frame!);
         Assert.True(colors > 1, $"FluentIcon 没有画出字形：只有 {colors} 种颜色");
 
         frame.Save(Path.Combine(TestPaths.Root, "icon.png"), PngBitmapEncoderOptions.Default);
-    }
-
-    private static int CountDistinctColors(WriteableBitmap bitmap)
-    {
-        using var buffer = bitmap.Lock();
-        var stride = buffer.RowBytes;
-        var height = buffer.Size.Height;
-        var width = buffer.Size.Width;
-
-        var pixels = new byte[stride * height];
-        Marshal.Copy(buffer.Address, pixels, 0, pixels.Length);
-
-        var colors = new HashSet<uint>();
-        for (var y = 0; y < height; y++)
-        {
-            var rowStart = y * stride;
-            for (var x = 0; x < width; x++)
-            {
-                var offset = rowStart + (x * 4);
-                colors.Add(BitConverter.ToUInt32(pixels, offset));
-            }
-        }
-
-        return colors.Count;
     }
 
     private static string NewSettingsFile(string name)

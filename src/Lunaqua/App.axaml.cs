@@ -1,6 +1,8 @@
+using System.Net;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Lunaqua.Infrastructure.OpenList;
 using Lunaqua.Services;
 using Lunaqua.ViewModels;
 using Lunaqua.Views;
@@ -28,6 +30,10 @@ public partial class App : Application
         services.AddSingleton<ISettingsService>(settings);
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton(CreateHttpClient());
+        services.AddSingleton(new OpenListOptions());
+        services.AddSingleton<OpenListClient>();
+        services.AddSingleton<ModRepository>();
         services.AddSingleton<HomeViewModel>();
         services.AddSingleton<ModDetailViewModel>();
         services.AddSingleton<ModLibraryViewModel>();
@@ -51,6 +57,19 @@ public partial class App : Application
 
         Log.Information("界面已就绪");
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private static HttpClient CreateHttpClient()
+    {
+        var handler = new SocketsHttpHandler
+        {
+            AutomaticDecompression = DecompressionMethods.All,
+            ConnectTimeout = TimeSpan.FromSeconds(15),
+        };
+
+        var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(60) };
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("Lunaqua/0.0.0 (+https://blog.monblog.top/openlist)");
+        return client;
     }
 
     private void Shutdown()

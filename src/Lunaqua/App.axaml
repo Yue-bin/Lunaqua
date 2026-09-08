@@ -32,6 +32,8 @@
           <SolidColorBrush x:Key="NavActiveForegroundBrush" Color="#0B4FC4" />
           <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF" />
           <SolidColorBrush x:Key="CardBorderBrush" Color="#1F000000" />
+          <SolidColorBrush x:Key="WarningBrush" Color="#A15C00" />
+          <SolidColorBrush x:Key="CodeBackgroundBrush" Color="#F6F6F6" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
           <SolidColorBrush x:Key="NavHoverBrush" Color="#18FFFFFF" />
@@ -39,6 +41,8 @@
           <SolidColorBrush x:Key="NavActiveForegroundBrush" Color="#9CC0FF" />
           <SolidColorBrush x:Key="CardBackgroundBrush" Color="#1F1F1F" />
           <SolidColorBrush x:Key="CardBorderBrush" Color="#33FFFFFF" />
+          <SolidColorBrush x:Key="WarningBrush" Color="#F0B429" />
+          <SolidColorBrush x:Key="CodeBackgroundBrush" Color="#171717" />
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
     </ResourceDictionary>

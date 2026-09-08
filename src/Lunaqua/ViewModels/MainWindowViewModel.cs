@@ -69,5 +69,11 @@ public sealed partial class MainWindowViewModel : ObservableObject
         CurrentPage = page;
         CurrentTitle = page.Title;
         IsDrawerOpen = false;
+
+        // 页面自己决定要不要拉数据（Mod 库首次进入时读站点目录）
+        if (page is IActivatablePage activatable)
+        {
+            _ = activatable.ActivateAsync();
+        }
     }
 }
