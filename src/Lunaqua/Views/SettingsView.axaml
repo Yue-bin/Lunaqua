@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Lunaqua.ViewModels"
+             x:Class="Lunaqua.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="22" MaxWidth="860" HorizontalAlignment="Left">
+      <TextBlock Classes="pageTitle" Text="{Binding Title}" />
+
+      <!-- 游戏目录 -->
+      <StackPanel Spacing="8">
+        <TextBlock Classes="sectionTitle" Text="游戏目录" />
+        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+          <Border Grid.Column="0" Classes="field">
+            <TextBlock Text="{Binding GameDirectoryText}" TextWrapping="Wrap" VerticalAlignment="Center" />
+          </Border>
+          <Button Grid.Column="1" Content="选择目录…" Command="{Binding PickGameDirectoryCommand}" />
+          <Button Grid.Column="2" Content="清除" Command="{Binding ClearGameDirectoryCommand}" />
+        </Grid>
+        <TextBlock Classes="hint" Text="{Binding GameDirectoryHint}" />
+      </StackPanel>
+
+      <!-- 外观 -->
+      <StackPanel Spacing="8">
+        <TextBlock Classes="sectionTitle" Text="外观" />
+        <ComboBox ItemsSource="{Binding ThemeOptions}"
+                  SelectedItem="{Binding SelectedTheme}"
+                  Width="200"
+                  HorizontalAlignment="Left">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:ThemeOption">
+              <TextBlock Text="{Binding Label}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+
+      <!-- 更新 -->
+      <StackPanel Spacing="8">
+        <TextBlock Classes="sectionTitle" Text="更新" />
+        <ToggleSwitch IsChecked="{Binding CheckUpdateOnStartup}"
+                      Content="启动时检查 Lunaqua 更新"
+                      OnContent="开"
+                      OffContent="关" />
+        <TextBlock Classes="hint" Text="M5 里程碑接入自动更新；现在这个开关只记录偏好。" />
+      </StackPanel>
+
+      <!-- 数据与缓存 -->
+      <StackPanel Spacing="8">
+        <TextBlock Classes="sectionTitle" Text="数据与缓存" />
+        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+          <Border Grid.Column="0" Classes="field">
+            <TextBlock Text="{Binding DataDirectory}" TextWrapping="Wrap" VerticalAlignment="Center" />
+          </Border>
+          <Button Grid.Column="1" Content="打开数据目录" Command="{Binding OpenDataDirectoryCommand}" />
+          <Button Grid.Column="2" Content="打开缓存目录" Command="{Binding OpenCacheDirectoryCommand}" />
+        </Grid>
+        <TextBlock Classes="hint" Text="缓存按文件哈希复用；「清理缓存」在 M2 里程碑加上。" />
+      </StackPanel>
+
+      <!-- 关于 -->
+      <StackPanel Spacing="8">
+        <TextBlock Classes="sectionTitle" Text="关于" />
+        <TextBlock Text="{Binding VersionText}" />
+        <TextBlock Classes="hint" Text="M5 里程碑会在这里加「检查更新」与「回退到上一版」。" />
+      </StackPanel>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

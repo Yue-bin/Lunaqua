@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Lunaqua.ViewModels"
+             x:Class="Lunaqua.Views.ModDetailView"
+             x:DataType="vm:ModDetailViewModel">
+
+  <DockPanel Margin="20">
+    <TextBlock DockPanel.Dock="Top"
+               Classes="hint"
+               Text="{Binding EmptyHint}"
+               Margin="0,0,0,12" />
+
+    <TabControl>
+      <TabItem Header="概览">
+        <TextBlock Classes="hint" Text="{Binding OverviewHint}" Margin="12" />
+      </TabItem>
+      <TabItem Header="配置">
+        <TextBlock Classes="hint" Text="{Binding ConfigHint}" Margin="12" />
+      </TabItem>
+      <TabItem Header="版本">
+        <TextBlock Classes="hint" Text="{Binding VersionHint}" Margin="12" />
+      </TabItem>
+    </TabControl>
+  </DockPanel>
+</UserControl>

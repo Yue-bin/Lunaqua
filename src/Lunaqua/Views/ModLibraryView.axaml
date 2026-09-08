@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Lunaqua.ViewModels"
+             xmlns:ic="using:FluentIcons.Avalonia"
+             x:Class="Lunaqua.Views.ModLibraryView"
+             x:DataType="vm:ModLibraryViewModel">
+
+  <Grid ColumnDefinitions="400,*">
+    <!-- 左：搜索 + 列表 -->
+    <Border Grid.Column="0"
+            BorderThickness="0,0,1,0"
+            BorderBrush="{DynamicResource CardBorderBrush}">
+      <DockPanel Margin="16">
+        <StackPanel DockPanel.Dock="Top" Spacing="10">
+          <TextBlock Classes="pageTitle" Text="{Binding Title}" />
+          <TextBox Text="{Binding SearchText}"
+                   PlaceholderText="搜索 mod（M1 接入站点后可用）"
+                   IsEnabled="False" />
+        </StackPanel>
+
+        <Border Classes="card" Margin="0,14,0,0">
+          <StackPanel Spacing="8">
+            <ic:FluentIcon Icon="Library" IconSize="Size24" Opacity="0.5" />
+            <TextBlock Classes="hint" Text="{Binding ListHint}" />
+          </StackPanel>
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <!-- 右：详情 -->
+    <ContentControl Grid.Column="1" Content="{Binding Detail}" />
+  </Grid>
+</UserControl>

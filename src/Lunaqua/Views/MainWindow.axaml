@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Lunaqua.ViewModels"
+        xmlns:ic="using:FluentIcons.Avalonia"
+        x:Class="Lunaqua.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Lunaqua —「柴」mod 管理器"
+        Icon="avares://Lunaqua/Assets/lunaqua-logo.png"
+        Width="1180" Height="760"
+        MinWidth="940" MinHeight="620"
+        WindowStartupLocation="CenterScreen">
+
+  <DrawerPage IsOpen="{Binding IsDrawerOpen, Mode=TwoWay}"
+              DrawerLayoutBehavior="CompactInline"
+              CompactDrawerLength="48"
+              DrawerLength="230">
+
+    <DrawerPage.Drawer>
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="14,16,14,14">
+          <Image Source="avares://Lunaqua/Assets/lunaqua-logo.png" Width="24" Height="24" />
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="{Binding AppName}" FontWeight="SemiBold" FontSize="15" />
+            <TextBlock Text="{Binding AppSubtitle}" Classes="hint" />
+          </StackPanel>
+        </StackPanel>
+
+        <ItemsControl ItemsSource="{Binding NavItems}" Margin="8,0,8,8">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:NavItem">
+              <Button Classes="nav"
+                      Classes.active="{Binding IsActive}"
+                      Command="{Binding SelectCommand}"
+                      Margin="0,0,0,2"
+                      ToolTip.Tip="{Binding Title}">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                  <ic:FluentIcon Icon="{Binding Icon}" IconSize="Size20" />
+                  <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+                </StackPanel>
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </DockPanel>
+    </DrawerPage.Drawer>
+
+    <DockPanel>
+      <Border DockPanel.Dock="Top"
+              Padding="10,8"
+              BorderThickness="0,0,0,1"
+              BorderBrush="{DynamicResource CardBorderBrush}">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Button Command="{Binding ToggleDrawerCommand}"
+                  Padding="6"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  ToolTip.Tip="折叠 / 展开侧边栏">
+            <ic:FluentIcon Icon="Navigation" IconSize="Size20" />
+          </Button>
+          <TextBlock Text="{Binding CurrentTitle}"
+                     FontSize="15"
+                     FontWeight="SemiBold"
+                     VerticalAlignment="Center" />
+        </StackPanel>
+      </Border>
+
+      <ContentControl Content="{Binding CurrentPage}" />
+    </DockPanel>
+  </DrawerPage>
+</Window>

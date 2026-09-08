@@ -1,0 +1,82 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Lunaqua.ViewModels"
+             xmlns:ic="using:FluentIcons.Avalonia"
+             x:Class="Lunaqua.Views.HomeView"
+             x:DataType="vm:HomeViewModel">
+
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="20">
+      <TextBlock Classes="pageTitle" Text="{Binding Title}" />
+
+      <!-- 状态卡 -->
+      <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+        <Border Grid.Column="0" Classes="card">
+          <StackPanel Spacing="6">
+            <TextBlock Classes="sectionTitle" Text="游戏目录" />
+            <TextBlock Text="{Binding GameDirectoryText}" TextWrapping="Wrap" />
+            <TextBlock Classes="hint" Text="在「设置」里选一次就行。" />
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" Classes="card">
+          <StackPanel Spacing="6">
+            <TextBlock Classes="sectionTitle" Text="BepInEx" />
+            <TextBlock Text="{Binding BepInExStatusText}" />
+            <TextBlock Classes="hint" Text="M3 里程碑自动检测与代装。" />
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" Classes="card">
+          <StackPanel Spacing="6">
+            <TextBlock Classes="sectionTitle" Text="可更新 mod" />
+            <TextBlock Text="{Binding UpdateCountText}" />
+            <TextBlock Classes="hint" Text="M1 里程碑接入站点后统计。" />
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- 快捷操作 -->
+      <StackPanel Spacing="10">
+        <TextBlock Classes="sectionTitle" Text="快捷操作" />
+        <WrapPanel>
+          <Button IsEnabled="False" Margin="0,0,8,8" ToolTip.Tip="M3 里程碑实现">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ic:FluentIcon Icon="Wrench" IconSize="Size16" />
+              <TextBlock Text="安装 / 修复 BepInEx" />
+            </StackPanel>
+          </Button>
+
+          <Button IsEnabled="False" Margin="0,0,8,8" ToolTip.Tip="M1 里程碑实现">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ic:FluentIcon Icon="ArrowSync" IconSize="Size16" />
+              <TextBlock Text="检查更新" />
+            </StackPanel>
+          </Button>
+
+          <Button Command="{Binding OpenModFolderCommand}" Margin="0,0,8,8" ToolTip.Tip="打开 BepInEx/plugins">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ic:FluentIcon Icon="Folder" IconSize="Size16" />
+              <TextBlock Text="打开 mod 目录" />
+            </StackPanel>
+          </Button>
+
+          <Button Command="{Binding LaunchGameCommand}" Margin="0,0,8,8" ToolTip.Tip="通过 Steam 启动游戏">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ic:FluentIcon Icon="Play" IconSize="Size16" />
+              <TextBlock Text="启动游戏" />
+            </StackPanel>
+          </Button>
+        </WrapPanel>
+      </StackPanel>
+
+      <!-- 最近更新 -->
+      <StackPanel Spacing="10">
+        <TextBlock Classes="sectionTitle" Text="最近更新" />
+        <Border Classes="card">
+          <TextBlock Classes="hint" Text="{Binding RecentChangesHint}" />
+        </Border>
+      </StackPanel>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

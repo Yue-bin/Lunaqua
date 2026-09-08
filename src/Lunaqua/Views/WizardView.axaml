@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Lunaqua.ViewModels"
+             xmlns:ic="using:FluentIcons.Avalonia"
+             x:Class="Lunaqua.Views.WizardView"
+             x:DataType="vm:WizardViewModel">
+
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="820" HorizontalAlignment="Left">
+      <TextBlock Classes="pageTitle" Text="{Binding Title}" />
+      <TextBlock Classes="hint" Text="{Binding Hint}" />
+
+      <ItemsControl ItemsSource="{Binding Steps}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:WizardStep">
+            <Expander Header="{Binding Title}" IsExpanded="False" Margin="0,0,0,8">
+              <StackPanel Orientation="Horizontal" Spacing="12" Margin="4,8,0,8">
+                <ic:FluentIcon Icon="ChevronRight" IconSize="Size16" VerticalAlignment="Top" />
+                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+              </StackPanel>
+            </Expander>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <Button IsEnabled="False" HorizontalAlignment="Left" ToolTip.Tip="M3 里程碑实现">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <ic:FluentIcon Icon="Wrench" IconSize="Size16" />
+          <TextBlock Text="开始代装" />
+        </StackPanel>
+      </Button>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

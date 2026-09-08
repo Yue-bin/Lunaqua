@@ -1,0 +1,13 @@
+<Project>
+
+  <!-- 仓库级编译约定：src/ 与 tests/ 及 docs/tools 下的工具共用 -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- NuGet 漏洞通告不作为错误（否则离线/网络抖动会挡住编译） -->
+    <WarningsNotAsErrors>NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
+  </PropertyGroup>
+
+</Project>

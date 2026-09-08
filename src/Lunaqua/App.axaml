@@ -1,0 +1,51 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Lunaqua.ViewModels"
+             xmlns:views="using:Lunaqua.Views"
+             x:Class="Lunaqua.App"
+             RequestedThemeVariant="Default">
+
+  <Application.DataTemplates>
+    <DataTemplate DataType="vm:HomeViewModel" x:DataType="vm:HomeViewModel">
+      <views:HomeView />
+    </DataTemplate>
+    <DataTemplate DataType="vm:ModLibraryViewModel" x:DataType="vm:ModLibraryViewModel">
+      <views:ModLibraryView />
+    </DataTemplate>
+    <DataTemplate DataType="vm:ModDetailViewModel" x:DataType="vm:ModDetailViewModel">
+      <views:ModDetailView />
+    </DataTemplate>
+    <DataTemplate DataType="vm:WizardViewModel" x:DataType="vm:WizardViewModel">
+      <views:WizardView />
+    </DataTemplate>
+    <DataTemplate DataType="vm:SettingsViewModel" x:DataType="vm:SettingsViewModel">
+      <views:SettingsView />
+    </DataTemplate>
+  </Application.DataTemplates>
+
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="NavHoverBrush" Color="#0F000000" />
+          <SolidColorBrush x:Key="NavActiveBrush" Color="#182F6FEB" />
+          <SolidColorBrush x:Key="NavActiveForegroundBrush" Color="#0B4FC4" />
+          <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="CardBorderBrush" Color="#1F000000" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="NavHoverBrush" Color="#18FFFFFF" />
+          <SolidColorBrush x:Key="NavActiveBrush" Color="#332F6FEB" />
+          <SolidColorBrush x:Key="NavActiveForegroundBrush" Color="#9CC0FF" />
+          <SolidColorBrush x:Key="CardBackgroundBrush" Color="#1F1F1F" />
+          <SolidColorBrush x:Key="CardBorderBrush" Color="#33FFFFFF" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://Lunaqua/Resources/Styles.axaml" />
+  </Application.Styles>
+</Application>
