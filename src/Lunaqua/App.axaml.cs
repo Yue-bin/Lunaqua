@@ -42,6 +42,16 @@ public partial class App : Application
         services.AddSingleton<InstallEngine>();
         services.AddSingleton<InstalledModService>();
         services.AddSingleton<TaskQueue>();
+        services.AddSingleton(BepInExPackManifestLoader.Load());
+        services.AddSingleton<IBepInExPackSource>(provider => new SiteBepInExPackSource(
+            provider.GetRequiredService<OpenListClient>(),
+            provider.GetRequiredService<CacheStore>(),
+            provider.GetRequiredService<BepInExPackManifest>()));
+        services.AddSingleton<IGameLauncher, ProcessGameLauncher>();
+        services.AddSingleton(provider => new BepInExInstaller(
+            provider.GetRequiredService<IBepInExPackSource>(),
+            provider.GetRequiredService<IGameLauncher>(),
+            provider.GetRequiredService<BepInExPackManifest>()));
         services.AddSingleton<HomeViewModel>();
         services.AddSingleton<ModDetailViewModel>();
         services.AddSingleton<ModLibraryViewModel>();

@@ -17,6 +17,8 @@
     <AvaloniaResource Include="..\..\Assets\**" Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
     <!-- 官方构建指纹表随程序发布（干净判定用） -->
     <EmbeddedResource Include="..\..\data\game-fingerprints.json" LogicalName="Lunaqua.data.game-fingerprints.json" />
+    <!-- 站上 BepInEx pack 清单（代装时逐文件校验） -->
+    <EmbeddedResource Include="..\..\data\bepinex-pack.json" LogicalName="Lunaqua.data.bepinex-pack.json" />
   </ItemGroup>
 
   <ItemGroup>
