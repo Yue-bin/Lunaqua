@@ -41,7 +41,9 @@
 
 1. **M3 BepInEx 全自动代装**（进行中）—— 已完成：Steam 库定位（注册表 → libraryfolders.vdf → appmanifest）、PE 判位数、游戏目录结构校验；
    待做：干净判定三层（buildid / 官方指纹表 / 本机首扫基线）、备份、部署 5.4.23.5 win_x64、`LogOutput.log` 验证与一键回滚 + 三步 UI（规格书 §8）
-   - 卡点：官方构建指纹表还没有（需要持游戏的账号跑 DepotDownloader，规格书 §13 风险 3）→ 先做第 ①③ 层
+   - 官方构建指纹表：`bash docs/tools/fingerprint/wizard.sh`（6 站向导，见 `docs/tools/fingerprint/README.md`）；
+     当前 build `24952802` / depot `674945` 的元数据已登记在 `data/game-fingerprints.json`，哈希待采
+   - 实机事实：安装目录 `StickFightTheGame`，但 exe 是 `StickFight.exe`、数据目录 `StickFight_Data`
 2. **M4–M6** —— 见规格书 §12 里程碑表
    - 已完成：M0（骨架）、M1（站点与元数据）、M2（生命周期引擎 + 详情页动作）
    - 还没做：手动纳管（§7.5）、UVFS 冲突提示、错误话术、日志导出（M6）

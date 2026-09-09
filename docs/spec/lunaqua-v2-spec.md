@@ -296,7 +296,10 @@ interface IModTypeStrategy
 
 ## 13. 风险与开放项
 
-1. 站上 BepInEx pack 的实际内容与 64 位更新后的真实 exe/Data 命名**需实机核对**（调研子代理侧 404）；
+1. 站上 BepInEx pack 的实际内容**仍需实机核对**；exe/Data 命名已实机核对（2026-09-09）：
+   public build `24952802`、Windows 64 位 depot `674945`；安装目录 `StickFightTheGame`、
+   exe `StickFight.exe`、数据目录 `StickFight_Data`（**目录名 ≠ exe 名，别按 installdir 推**）；
+   该版本 Managed 里是 `UnityEngine.dll`（无 `UnityEngine.CoreModule.dll`），也没有 `data.unity3d`；
 2. 静态更新目录的**主机/路径/上传凭据**待定（建议与 mod CI 的 SFTP 同源）；
 3. 官方构建指纹表的**生成与维护流程**（需持有游戏的账号跑 DepotDownloader）；
 4. 站上 **guest 写权限建议收紧**（安全）；
