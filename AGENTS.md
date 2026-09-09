@@ -45,13 +45,13 @@
 
 ## 待办
 
-1. **M3 BepInEx 全自动代装**（进行中）—— 已完成：Steam 库定位（注册表 → libraryfolders.vdf → appmanifest）、PE 判位数、游戏目录结构校验；
-   待做：干净判定三层（buildid / 官方指纹表 / 本机首扫基线）、备份、部署 5.4.23.5 win_x64、`LogOutput.log` 验证与一键回滚 + 三步 UI（规格书 §8）
+1. **M4 配置编辑器** —— `.cfg` 行式解析/写回、按类型生成控件（Boolean/数值/枚举/KeyboardShortcut/Color）、
+   「只看已改动项」/重置/备份/游戏运行中只读（规格书 §9）
    - 官方构建指纹表：`bash docs/tools/fingerprint/wizard.sh`（6 站向导，见 `docs/tools/fingerprint/README.md`）；
      当前 build `24952802` / depot `674945` 的元数据已登记在 `data/game-fingerprints.json`，哈希待采
    - 实机事实：安装目录 `StickFightTheGame`，但 exe 是 `StickFight.exe`、数据目录 `StickFight_Data`
-2. **M4–M6** —— 见规格书 §12 里程碑表
-   - 已完成：M0（骨架）、M1（站点与元数据）、M2（生命周期引擎 + 详情页动作）
+2. **M5–M6** —— 见规格书 §12 里程碑表
+   - 已完成：M0（骨架）、M1（站点与元数据）、M2（生命周期引擎 + 详情页动作）、M3（BepInEx 代装全链路）
    - 还没做：手动纳管（§7.5）、UVFS 冲突提示、错误话术、日志导出（M6）
 3. 可选（站长自办）：DesyncFixer/xhighws 的 `name` 美化与 `author` 补全；收紧 OpenList guest 写权限；生成 674940 官方指纹表；实机核对站上 BepInEx pack
 

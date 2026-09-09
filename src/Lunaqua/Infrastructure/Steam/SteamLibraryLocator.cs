@@ -96,6 +96,47 @@ public sealed class SteamLibraryLocator
         return libraries;
     }
 
+    /// <summary>找到的游戏位置（目录 + appmanifest）。</summary>
+    /// <param name="Directory">游戏根目录。</param>
+    /// <param name="Manifest">appmanifest 的关键字段（buildid 用于干净判定第一层）。</param>
+    public sealed record GameLocation(string Directory, AppManifest Manifest);
+
+    /// <summary>在各库里找 <c>appmanifest_&lt;appId&gt;.acf</c>，返回游戏目录与 manifest。</summary>
+    public GameLocation? FindGame(string appId, string? steamPath = null)
+    {
+        steamPath ??= FindSteamPath();
+        if (string.IsNullOrWhiteSpace(steamPath))
+        {
+            _log.Information("没找到 Steam 安装路径");
+            return null;
+        }
+
+        foreach (var library in ReadLibraries(steamPath))
+        {
+            var manifestPath = Path.Combine(library.SteamAppsDirectory, $"appmanifest_{appId}.acf");
+            if (!File.Exists(manifestPath))
+            {
+                continue;
+            }
+
+            var manifest = AppManifest.Parse(File.ReadAllText(manifestPath));
+            if (manifest is null)
+            {
+                _log.Warning("appmanifest 解析失败：{Path}", manifestPath);
+                continue;
+            }
+
+            var directory = Path.Combine(library.CommonDirectory, manifest.InstallDir);
+            if (Directory.Exists(directory))
+            {
+                _log.Information("找到游戏目录 {Directory}（buildid {BuildId}）", directory, manifest.BuildId);
+                return new GameLocation(directory, manifest);
+            }
+        }
+
+        return null;
+    }
+
     /// <summary>在各库里找 <c>appmanifest_&lt;appId&gt;.acf</c>，返回游戏目录。</summary>
     public string? FindGameDirectory(string appId, string? steamPath = null)
     {

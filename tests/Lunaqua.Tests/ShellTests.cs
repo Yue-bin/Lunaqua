@@ -56,6 +56,24 @@ public sealed class ShellTests
     }
 
     [AvaloniaFact]
+    public void 代装向导页能渲染()
+    {
+        var main = App.Services.GetRequiredService<MainWindowViewModel>();
+        var window = new MainWindow { DataContext = main };
+        window.Show();
+
+        main.NavItems.Single(item => item.Key == "wizard").SelectCommand.Execute(null);
+        Assert.IsType<WizardViewModel>(main.CurrentPage);
+
+        var frame = window.CaptureRenderedFrame();
+        Assert.NotNull(frame);
+        Assert.True(TestImages.CountDistinctColors(frame!) > 100, "向导页疑似空白帧");
+
+        frame!.Save(Path.Combine(TestPaths.Root, "wizard.png"), PngBitmapEncoderOptions.Default);
+        Assert.True(new FileInfo(Path.Combine(TestPaths.Root, "wizard.png")).Length > 0);
+    }
+
+    [AvaloniaFact]
     public void 设置页改外观会落盘()
     {
         var file = NewSettingsFile("theme");

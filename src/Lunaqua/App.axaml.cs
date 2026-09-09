@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Lunaqua.Domain;
 using Lunaqua.Infrastructure.OpenList;
+using Lunaqua.Infrastructure.Steam;
 using Lunaqua.Services;
 using Lunaqua.ViewModels;
 using Lunaqua.Views;
@@ -48,6 +49,9 @@ public partial class App : Application
             provider.GetRequiredService<CacheStore>(),
             provider.GetRequiredService<BepInExPackManifest>()));
         services.AddSingleton<IGameLauncher, ProcessGameLauncher>();
+        services.AddSingleton(GameFingerprintTableLoader.Load());
+        services.AddSingleton<GameCleanCheckService>();
+        services.AddSingleton<SteamLibraryLocator>();
         services.AddSingleton(provider => new BepInExInstaller(
             provider.GetRequiredService<IBepInExPackSource>(),
             provider.GetRequiredService<IGameLauncher>(),

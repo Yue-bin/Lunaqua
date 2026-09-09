@@ -14,9 +14,10 @@
   - **M0 骨架** ✅ DrawerPage 壳 + 四个页面 + 设置持久化 + 文件日志
   - **M1 站点与元数据** ✅ 自研 OpenList 客户端、info.json 解析校验、Mod 库列表/搜索/详情（站上 9 个 mod 联调通过）
   - **M2 生命周期** ✅ 事务式安装/更新/回退/卸载/启停、凭证、类型策略、sha256 缓存、串行队列、游戏运行检测
-  - **M3 BepInEx 代装** 🚧 Steam 库定位 / PE 判位数 / 目录结构校验已就绪；部署与验证待做
-  - 测试：`dotnet test Lunaqua.sln` → 115 个用例
-- 下一步：**M3 剩余**（干净判定、备份、部署 BepInEx 5.4.23.5、LogOutput 验证与回滚 + 三步 UI）
+  - **M3 BepInEx 代装** ✅ Steam 库定位、PE 判位数、干净判定三层、备份、部署 5.4.23.5（23 文件逐哈希）、
+    跑游戏验证 `LogOutput.log`、失败回滚、三步向导
+  - 测试：`dotnet test Lunaqua.sln` → 137 个用例（另有 1 个真机联调用例，设环境变量才跑）
+- 下一步：**M4 配置编辑器**（.cfg 解析/写回 + 按类型生成控件）
 - 开发辅助：`bash docs/tools/install-avalonia-skills.sh` 安装 Avalonia 12 skill 包（33 个）
 
 ## 开发
