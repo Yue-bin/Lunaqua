@@ -15,6 +15,8 @@
   <ItemGroup>
     <!-- 品牌资产统一放仓库根 Assets/，只做一份 -->
     <AvaloniaResource Include="..\..\Assets\**" Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
+    <!-- 官方构建指纹表随程序发布（干净判定用） -->
+    <EmbeddedResource Include="..\..\data\game-fingerprints.json" LogicalName="Lunaqua.data.game-fingerprints.json" />
   </ItemGroup>
 
   <ItemGroup>
