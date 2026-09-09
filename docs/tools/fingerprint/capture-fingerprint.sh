@@ -44,7 +44,8 @@ for rel in \
 do
   path="$GAME_DIR/$rel"
   [ -f "$path" ] || continue
-  sha="$(sha256sum "$path" | cut -d' ' -f1)"
+  # 用 stdin 喂给 sha256sum：路径里的反斜杠会让它给输出加前导 \
+  sha="$(sha256sum < "$path" | cut -d' ' -f1)"
   size="$(stat -c%s "$path")"
   if [ "$count" -gt 0 ]; then json_files="$json_files,"; fi
   json_files="$json_files
@@ -63,7 +64,7 @@ row="{
   \"manifest\": \"$MANIFEST\",
   \"exe\": \"$EXE\",
   \"dataDir\": \"$DATA_DIR\",
-  \"capturedAt\": \"$(date -Iseconds)\", 
+  \"capturedAt\": \"$(date -Iseconds)\",
   \"source\": \"local-capture\",
   \"files\": [$json_files
   ]

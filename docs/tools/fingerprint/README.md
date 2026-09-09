@@ -10,10 +10,24 @@
 - `node`（仓库里已经在用）
 - 可选：`winget install --exact --id SteamRE.DepotDownloader`（补历史 build 才需要）
 
-## 一条命令
+## 当前状态（2026-09-09）
+
+当前 public build **24952802** 的指纹**已经采好**（5 个文件，见 `data/game-fingerprints.json`），
+不需要再跑向导；游戏下次大更新后重跑一次即可。
+
+## 怎么跑
+
+**别用 `bash`**：Windows 上的 `bash` 常常指向 WSL，会因内存不足报
+`Bash/Service/CreateInstance/CreateVm/HCS/0x800705aa`。用 Git Bash：
+
+```bat
+docs\tools\fingerprint\wizard.cmd
+```
+
+或直接指定 Git Bash：
 
 ```bash
-bash docs/tools/fingerprint/wizard.sh
+"C:\Program Files\Git\bin\bash.exe" docs/tools/fingerprint/wizard.sh
 ```
 
 向导共 6 站，会替你做掉能自动做的部分，只让你做机器做不了的部分：
@@ -22,10 +36,12 @@ bash docs/tools/fingerprint/wizard.sh
 |---|---|---|
 | 1 | 看说明 | 检查 DepotDownloader 是否就绪 |
 | 2 | 看一眼数字 | 从 `api.steamcmd.net` 读当前 buildid / depot / manifest（匿名） |
-| 3 | 在 Steam 里点「验证游戏文件的完整性」 | 打开 `steam://validate/674940`，等你跑完 |
+| 3 | 可选：在 Steam 里点「验证游戏文件的完整性」 | 打开 `steam://validate/674940`，等你跑完 |
 | 4 | 确认游戏目录 | 算 SHA-256 并写进指纹表 |
 | 5 | 可选：粘贴 SteamDB 上的历史 manifest id | 调 DepotDownloader 只拉几个文件，再采集 |
 | 6 | 提交文件 | 打印表内 build 数 |
+
+> 历史 build 基本没用：没更新的玩家是 32 位旧版，根本进不去联机；真遇到了也不该用管理器。
 
 ## 指纹表格式
 
