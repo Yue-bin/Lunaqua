@@ -81,7 +81,7 @@
 | `id` | string | ✓ | **必须等于目录名**；不一致 → 以元数据 id 记账 + 界面标黄警告，仍可管理 |
 | `type` | string | ✓ | `bepinex` \| `uvfs` \| `uvfs-framework` |
 | `guid` | string | bepinex/uvfs-framework 必填 | CI 从 dll 的 BepInPlugin 解析 |
-| `name` / `author` / `description` | string | ✓ | 全部来自 readme（见 4.4）；description 为纯文本短文案 |
+| `name` / `author` / `description` | string | ✓ | 全部来自 readme（见 4.4）；description 为纯文本短文案。**`author` 为空时容忍**（界面显示「未知作者」，仅告警）：站上 8/9 个存量 mod 的 readme 没有作者小节 |
 | `latest` | string | ✓ | 必须是 `versions[]` 中存在的版本号 |
 | `dependencies` | array | ✓（可为空） | `[{ id, minVersion? }]`，CI 从 BepInDependency 解析 |
 | `versions` | array | ✓ | 每项 `{ version, released, files[], changelog? }` |

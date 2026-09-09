@@ -39,8 +39,10 @@
 
 ## 待办
 
-1. **M1 站点与元数据** —— OpenListClient（列目录/取直链/下载）、`info.json` 解析与校验、Mod 库列表/搜索/详情（验收：站上 9 个 mod 正确列出，id 不一致标黄，搜索可用）
-2. **M2–M6** —— 见规格书 §12 里程碑表
+1. **M3 BepInEx 全自动代装** —— 定位游戏（注册表 → libraryfolders.vdf → appmanifest）、PE 判位数、干净判定三层（buildid / 官方指纹表 / 本机首扫基线）、备份、部署 5.4.23.5 win_x64、`LogOutput.log` 验证与一键回滚 + 三步 UI（规格书 §8）
+2. **M4–M6** —— 见规格书 §12 里程碑表
+   - 已完成：M0（骨架）、M1（站点与元数据）、M2（生命周期引擎 + 详情页动作）
+   - 还没做：手动纳管（§7.5）、UVFS 冲突提示、错误话术、日志导出（M6）
 3. 可选（站长自办）：DesyncFixer/xhighws 的 `name` 美化与 `author` 补全；收紧 OpenList guest 写权限；生成 674940 官方指纹表；实机核对站上 BepInEx pack
 
 ## 规矩

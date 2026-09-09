@@ -10,8 +10,12 @@
 ## 状态
 
 - 技术栈：Avalonia 12.1.2 / .NET 10 / CommunityToolkit.Mvvm / FluentIcons / Serilog / MS.DI / Velopack
-- 进度：**M0 骨架完成**——DrawerPage 壳 + 首页 / Mod 库 / 代装 / 设置四个页面 + 设置持久化 + 文件日志 + 无头渲染测试（9/9 通过）
-- 下一步：**M1 站点与元数据**（OpenList 客户端、info.json 解析与校验、Mod 库列表/搜索/详情）
+- 进度：
+  - **M0 骨架** ✅ DrawerPage 壳 + 四个页面 + 设置持久化 + 文件日志
+  - **M1 站点与元数据** ✅ 自研 OpenList 客户端、info.json 解析校验、Mod 库列表/搜索/详情（站上 9 个 mod 联调通过）
+  - **M2 生命周期** ✅ 事务式安装/更新/回退/卸载/启停、凭证、类型策略、sha256 缓存、串行队列、游戏运行检测
+  - 测试：`dotnet test Lunaqua.sln` → 104 个用例
+- 下一步：**M3 BepInEx 全自动代装**（定位游戏 / PE 判位数 / 哈希三层 / 备份 / 部署 / 验证 / 回滚）
 - 开发辅助：`bash docs/tools/install-avalonia-skills.sh` 安装 Avalonia 12 skill 包（33 个）
 
 ## 开发
