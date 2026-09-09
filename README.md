@@ -18,8 +18,10 @@
     跑游戏验证 `LogOutput.log`、失败回滚、三步向导
   - **M4 配置编辑器** ✅ `.cfg` 行式解析/写回（注释顺序不丢）、按类型生成控件
     （开关 / 数字框带范围 / 枚举下拉 / 快捷键 / 颜色）、只看已改动项、重置、首改备份、游戏运行中只读
-  - 测试：`dotnet test Lunaqua.sln` → 162 个用例（另有真机联调用例，设环境变量才跑）
-- 下一步：**M5 自更新**（Velopack 打包 + 静态更新源 + 回退）
+  - **M5 自更新** ✅ Velopack 1.2.0 打包（本地实测出 Setup.exe + nupkg + `releases.win.json`）、
+    启动后台检查 + 横幅「下载并重启」、设置页「检查更新 / 回退到上一版」、tag 触发的 GH Actions 流水线
+  - 测试：`dotnet test Lunaqua.sln` → 170 个用例（另有真机联调用例，设环境变量才跑）
+- 待人工：静态更新目录的主机/路径/上传凭据（规格书 §13 风险 2），配好后取消 `.github/workflows/release.yml` 里的上传段注释
 - 开发辅助：`bash docs/tools/install-avalonia-skills.sh` 安装 Avalonia 12 skill 包（33 个）
 
 ## 开发

@@ -270,7 +270,15 @@ interface IModTypeStrategy
 ## 11. 分发与自更新
 
 - **首发**：OpenList 站根 `Lunaqua/` 目录 —— 最新 `Setup.exe` + `readme.md`（安装/更新/卸载/回退说明），**只保留最近 3 个版本**（该目录无 info.json，管理器按约定忽略）。
-- **自动更新源**：自建静态目录（如 `https://blog.monblog.top/lunaqua/updates`，Caddy 托管、**无 sign**），Velopack `SimpleWebSource` 读 `releases.win.json` + 差分包。**不挂 OpenList 直链**（SignAll + Token 轮换风险）。
+- **自动更新源**：自建静态目录（`https://blog.monblog.top/lunaqua/updates`，Caddy 托管、**无 sign**），Velopack `SimpleWebSource` 读 `releases.win.json` + 差分包。**不挂 OpenList 直链**（SignAll + Token 轮换风险）。
+  - 已实现：`VelopackUpdateService`（默认源写死，环境变量 `LUNAQUA_UPDATE_URL` 可覆盖联调）；
+    启动后台检查（设置里可关）→ 顶部横幅「下载并重启」；设置页「检查更新 / 回退到上一版」
+    （回退 = 拉 release feed 取比当前版本低的最近一版，`AllowVersionDowngrade` + `WaitExitThenApplyUpdates`）。
+  - 打包实测（2026-09-09，本机）：`dotnet vpk pack` 产出 `Lunaqua-win-Setup.exe`（60MB 自包含）、
+    `Lunaqua-0.1.0-full.nupkg`、`Lunaqua-win-Portable.zip`、`releases.win.json`；vpk 自检确认
+    `VelopackApp.Run()` 在 `Program.Main` 里。vpk 用仓库本地工具清单固定版本（`.config/dotnet-tools.json`）。
+  - **待人工**：静态目录的主机/路径/上传凭据（secrets `UPDATE_HOST/UPDATE_USER/UPDATE_SSH_KEY/UPDATE_PATH`），
+    配好后取消 `.github/workflows/release.yml` 里上传段的注释。
 - **行为**：启动后台检查 → 有新版提示「下载并重启」；单稳定通道；设置页「回退到上一版」（Velopack 指定版本更新）。
 - **流水线**：GitHub Actions，tag 触发 → `dotnet publish` → `vpk pack` → 上传静态目录 + 站上 `Lunaqua/`；**版本号权威 = git tag**；Setup 内置更新源 URL。
 

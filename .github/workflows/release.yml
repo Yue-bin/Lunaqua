@@ -1,0 +1,73 @@
+name: 发布（tag 触发）
+
+# 版本号权威 = git tag（去掉前缀 v）。推 v0.1.0 就会打出 0.1.0 的包。
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pack:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: 跑测试
+        run: dotnet test Lunaqua.sln -c Release --nologo
+
+      - name: 发布（自包含 win-x64）
+        run: >
+          dotnet publish src/Lunaqua/Lunaqua.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=false -o publish
+
+      - name: 安装 vpk
+        run: dotnet tool install -g vpk
+
+      - name: 打包（Velopack）
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart("v")
+          if ($version -notmatch '^\\d+\\.\\d+\\.\\d+') {
+            Write-Error "tag 必须是 vX.Y.Z 形式，当前：${{ github.ref_name }}"
+            exit 1
+          }
+          vpk pack $back
+            --packId Lunaqua $back
+            --packVersion $version $back
+            --packTitle "Lunaqua" $back
+            --packAuthors "Yue-bin" $back
+            --packDir publish $back
+            --mainExe Lunaqua.exe $back
+            --icon Assets/avalonia-logo.ico $back
+            --channel win $back
+            --outputDir releases
+          Get-ChildItem releases | Format-Table Name, Length
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: velopack-releases
+          path: releases/
+
+      # ── 上传（需要人工配置，规格书 §11 / §13 风险 2）──────────────────────
+      # releases/ 里的 releases.win.json + *.nupkg + Setup.exe 要传到静态更新目录
+      # （Caddy 托管、无 sign），例如 https://blog.monblog.top/lunaqua/updates；
+      # 再把最新 Setup.exe + readme 传到 OpenList 站的 Lunaqua/ 目录（只留最近 3 版）。
+      #
+      # 需要的仓库 secrets（Settings → Secrets and variables → Actions）：
+      #   UPDATE_HOST / UPDATE_USER / UPDATE_SSH_KEY / UPDATE_PATH
+      # 配好后取消下面注释并补上传输命令：
+      #
+      # - name: 上传到静态更新目录
+      #   shell: pwsh
+      #   env:
+      #     SSH_KEY: ${{ secrets.UPDATE_SSH_KEY }}
+      #   run: |
+      #     ...

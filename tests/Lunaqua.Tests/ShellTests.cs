@@ -79,7 +79,7 @@ public sealed class ShellTests
         var file = NewSettingsFile("theme");
         var settings = new SettingsService(file);
         settings.Load();
-        var viewModel = new SettingsViewModel(settings, new DialogService(), new CacheStore(Path.Combine(TestPaths.Root, "cache")));
+        var viewModel = new SettingsViewModel(settings, new DialogService(), new CacheStore(Path.Combine(TestPaths.Root, "cache")), new FakeUpdateService());
 
         viewModel.SelectedTheme = viewModel.ThemeOptions.Single(option => option.Value == AppTheme.Dark);
 
@@ -95,7 +95,7 @@ public sealed class ShellTests
         var settings = new SettingsService(file);
         settings.Load();
         settings.Update(s => s.GameDirectory = @"C:\Games\StickFight");
-        var viewModel = new SettingsViewModel(settings, new DialogService(), new CacheStore(Path.Combine(TestPaths.Root, "cache")));
+        var viewModel = new SettingsViewModel(settings, new DialogService(), new CacheStore(Path.Combine(TestPaths.Root, "cache")), new FakeUpdateService());
 
         Assert.True(viewModel.HasGameDirectory);
 

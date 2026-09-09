@@ -67,8 +67,17 @@
       <!-- 关于 -->
       <StackPanel Spacing="8">
         <TextBlock Classes="sectionTitle" Text="关于" />
-        <TextBlock Text="{Binding VersionText}" />
-        <TextBlock Classes="hint" Text="M5 里程碑会在这里加「检查更新」与「回退到上一版」。" />
+        <TextBlock Text="{Binding VersionText}" FontWeight="SemiBold" />
+        <TextBlock Classes="hint" Text="{Binding UpdateHint}" />
+
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Content="检查更新" Command="{Binding CheckUpdateCommand}" />
+          <Button Content="回退到上一版" Command="{Binding RollbackCommand}" />
+        </StackPanel>
+
+        <TextBlock Text="{Binding UpdateStatus}"
+                   Classes="hint"
+                   IsVisible="{Binding UpdateStatus, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
       </StackPanel>
     </StackPanel>
   </ScrollViewer>

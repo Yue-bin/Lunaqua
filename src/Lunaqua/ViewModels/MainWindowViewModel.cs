@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
 using Lunaqua.Services;
+using Serilog;
 
 namespace Lunaqua.ViewModels;
 
@@ -9,6 +10,13 @@ namespace Lunaqua.ViewModels;
 public sealed partial class MainWindowViewModel : ObservableObject
 {
     private readonly IReadOnlyDictionary<string, ViewModelBase> _pages;
+    private readonly IUpdateService _updates;
+    private readonly ISettingsService _settings;
+    private AppUpdate? _pendingUpdate;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasUpdateBanner))]
+    private string? _updateBanner;
 
     [ObservableProperty]
     private ViewModelBase _currentPage;
@@ -27,9 +35,14 @@ public sealed partial class MainWindowViewModel : ObservableObject
         ModLibraryViewModel modLibrary,
         WizardViewModel wizard,
         SettingsViewModel settings,
-        TaskQueue queue)
+        TaskQueue queue,
+        IUpdateService updates,
+        ISettingsService settingsService)
     {
         queue.BusyChanged += (_, _) => IsBusy = queue.IsBusy;
+
+        _updates = updates;
+        _settings = settingsService;
 
         _pages = new Dictionary<string, ViewModelBase>(StringComparer.Ordinal)
         {
@@ -57,6 +70,64 @@ public sealed partial class MainWindowViewModel : ObservableObject
     public string AppSubtitle => "「柴」mod 管理器";
 
     public IReadOnlyList<NavItem> NavItems { get; }
+
+    public bool HasUpdateBanner => !string.IsNullOrWhiteSpace(UpdateBanner);
+
+    /// <summary>启动后后台检查一次（设置里可关）。</summary>
+    public async Task CheckUpdateOnStartupAsync()
+    {
+        if (!_settings.Current.CheckUpdateOnStartup)
+        {
+            return;
+        }
+
+        try
+        {
+            var update = await _updates.CheckAsync();
+            if (update is null)
+            {
+                return;
+            }
+
+            _pendingUpdate = update;
+            UpdateBanner = $"有新版本 {update.Version}";
+        }
+        catch (Exception ex)
+        {
+            Log.Debug(ex, "启动检查更新失败（不影响使用）");
+        }
+    }
+
+    [RelayCommand]
+    private async Task ApplyUpdateAsync()
+    {
+        if (_pendingUpdate is not { } update)
+        {
+            return;
+        }
+
+        try
+        {
+            UpdateBanner = $"正在下载 {update.Version}……";
+            var progress = new Progress<int>(percent => UpdateBanner = $"正在下载 {update.Version}…… {percent}%");
+            await _updates.DownloadAsync(update, progress);
+
+            UpdateBanner = $"正在安装 {update.Version}，程序会重启……";
+            await _updates.ApplyAndRestartAsync(update);
+        }
+        catch (Exception ex)
+        {
+            Log.Warning(ex, "应用更新失败");
+            UpdateBanner = $"更新失败：{ex.Message}";
+        }
+    }
+
+    [RelayCommand]
+    private void DismissUpdate()
+    {
+        _pendingUpdate = null;
+        UpdateBanner = null;
+    }
 
     [RelayCommand]
     private void ToggleDrawer() => IsDrawerOpen = !IsDrawerOpen;

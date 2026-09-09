@@ -45,8 +45,10 @@
 
 ## 待办
 
-1. **M5 自更新** —— Velopack 1.2.0 打包、GH Actions tag 流水线、静态更新源、设置页「回退到上一版」
-   （规格书 §11；**需要人工**：静态更新目录的主机/路径/上传凭据，规格书 §13 风险 2）
+1. **M6 打磨** —— 手动纳管（§7.5）、UVFS 冲突提示、错误话术、日志导出、测试补齐
+2. **M5 的收尾（需要人工）** —— 静态更新目录的主机/路径/上传凭据（规格书 §13 风险 2）；
+   配好后取消 `.github/workflows/release.yml` 上传段注释，并推一个 `vX.Y.Z` tag 验证流水线
+3. **发布前自检** —— `dotnet vpk pack` 本地能出包（已验证）；真机验证「装旧版 → 自动更新 → 提示重启 → 回退」
    - 官方构建指纹表：`bash docs/tools/fingerprint/wizard.sh`（6 站向导，见 `docs/tools/fingerprint/README.md`）；
      当前 build `24952802` / depot `674945` 的元数据已登记在 `data/game-fingerprints.json`，哈希待采
    - 实机事实：安装目录 `StickFightTheGame`，但 exe 是 `StickFight.exe`、数据目录 `StickFight_Data`

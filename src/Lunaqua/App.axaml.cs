@@ -54,6 +54,7 @@ public partial class App : Application
         services.AddSingleton<SteamLibraryLocator>();
         services.AddSingleton<ConfigEditorService>();
         services.AddSingleton<ConfigTabViewModel>();
+        services.AddSingleton<IUpdateService>(_ => new VelopackUpdateService());
         services.AddSingleton(provider => new BepInExInstaller(
             provider.GetRequiredService<IBepInExPackSource>(),
             provider.GetRequiredService<IGameLauncher>(),
@@ -72,11 +73,12 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = _services.GetRequiredService<MainWindowViewModel>(),
-            };
+            var mainViewModel = _services.GetRequiredService<MainWindowViewModel>();
+            desktop.MainWindow = new MainWindow { DataContext = mainViewModel };
             desktop.Exit += (_, _) => Shutdown();
+
+            // 启动后后台检查更新（设置里可关）
+            _ = mainViewModel.CheckUpdateOnStartupAsync();
         }
 
         Log.Information("界面已就绪");

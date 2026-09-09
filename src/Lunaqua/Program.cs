@@ -1,6 +1,7 @@
 using Avalonia;
 using Lunaqua.Services;
 using Serilog;
+using Velopack;
 
 namespace Lunaqua;
 
@@ -10,6 +11,9 @@ internal static class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        // Velopack 的钩子必须最先跑（处理 --veloapp-* 参数；开发运行时时是空操作）
+        VelopackApp.Build().Run();
+
         AppPaths.EnsureCreated();
         LogSetup.Initialize();
 

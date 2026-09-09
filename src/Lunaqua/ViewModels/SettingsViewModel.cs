@@ -13,7 +13,16 @@ public sealed partial class SettingsViewModel : ViewModelBase
     private readonly ISettingsService _settings;
     private readonly IDialogService _dialogs;
     private readonly CacheStore _cache;
+    private readonly IUpdateService _updates;
     private readonly bool _initialized;
+
+    [ObservableProperty]
+    private string _updateStatus = string.Empty;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CheckUpdateCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RollbackCommand))]
+    private bool _isCheckingUpdate;
 
     [ObservableProperty]
     private string _cacheSizeText = "—";
@@ -30,11 +39,12 @@ public sealed partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private bool _checkUpdateOnStartup;
 
-    public SettingsViewModel(ISettingsService settings, IDialogService dialogs, CacheStore cache)
+    public SettingsViewModel(ISettingsService settings, IDialogService dialogs, CacheStore cache, IUpdateService updates)
     {
         _settings = settings;
         _dialogs = dialogs;
         _cache = cache;
+        _updates = updates;
 
         ThemeOptions =
         [
@@ -54,7 +64,11 @@ public sealed partial class SettingsViewModel : ViewModelBase
 
     public IReadOnlyList<ThemeOption> ThemeOptions { get; }
 
-    public string VersionText => typeof(App).Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
+    public string VersionText => _updates.CurrentVersion;
+
+    public string UpdateHint => _updates.IsInstalled
+        ? "自动更新走自建静态目录（Velopack 差分）。"
+        : "当前是开发运行（不是 Velopack 安装版），自更新不可用。";
 
     public string DataDirectory => AppPaths.Root;
 
@@ -144,6 +158,60 @@ public sealed partial class SettingsViewModel : ViewModelBase
         return unit == 0
             ? $"{bytes} B"
             : string.Create(System.Globalization.CultureInfo.InvariantCulture, $"{value:0.#} {units[unit]}");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanCheckUpdate))]
+    private async Task CheckUpdateAsync()
+    {
+        IsCheckingUpdate = true;
+        UpdateStatus = "正在检查更新……";
+        try
+        {
+            var update = await _updates.CheckAsync();
+            UpdateStatus = update is null
+                ? "已经是最新版本。"
+                : $"有新版本 {update.Version}，到「设置 → 更新」点下载并重启。";
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus = $"检查更新失败：{ex.Message}";
+            Log.Warning(ex, "检查更新失败");
+        }
+        finally
+        {
+            IsCheckingUpdate = false;
+        }
+    }
+
+    private bool CanCheckUpdate() => !IsCheckingUpdate;
+
+    [RelayCommand(CanExecute = nameof(CanCheckUpdate))]
+    private async Task RollbackAsync()
+    {
+        IsCheckingUpdate = true;
+        UpdateStatus = "正在找上一版……";
+        try
+        {
+            var target = await _updates.FindRollbackTargetAsync();
+            if (target is null)
+            {
+                UpdateStatus = "更新源里没有更旧的版本，没法回退。";
+                return;
+            }
+
+            await _updates.DownloadAsync(target);
+            UpdateStatus = $"正在回退到 {target.Version}，程序会重启。";
+            await _updates.ApplyAndRestartAsync(target);
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus = $"回退失败：{ex.Message}";
+            Log.Warning(ex, "回退失败");
+        }
+        finally
+        {
+            IsCheckingUpdate = false;
+        }
     }
 
     [RelayCommand]
