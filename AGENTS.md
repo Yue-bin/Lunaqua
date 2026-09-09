@@ -35,7 +35,13 @@
 - 上游站：`https://blog.monblog.top/openlist`（OpenList v4.2.2，匿名只读可用）——**API 怪癖见规格书 §5**（HTTP 恒 200 + code、无 `/api/fs/read`、无搜索、sign 每次重取）
 - 站点开了 SignAll；**guest 有写权限（建议站长收紧）**
 - 站上 9 个 mod 的 `info.json` 已由补录工具生成、站长上传并逐字节校验通过（`docs/backfill/` 是同份草案）
-- 站上 BepInEx pack 实际内容 / 64 位更新后的 exe 与 Data 目录名**尚未实机核对**（规格书 §13 风险 1）
+- 站上 BepInEx pack **已实机核对**：`/BepInEx/BepInEx_pack_x64_这个文件夹不应该出现.zip` = 官方 5.4.23.5 win_x64
+  （22 文件哈希全对）+ 预置 `BepInEx/config/BepInEx.cfg`，共 23 文件；清单 `data/bepinex-pack.json`
+- **验证 BepInEx 不用从 Steam 启动**：把游戏复制到临时目录（`cp -r` 442MB 约 2 秒）→ 部署 pack →
+  直接跑 `StickFight.exe` → 25 秒后杀进程 → 看 `BepInEx/LogOutput.log`（实测出现
+  `BepInEx 5.4.23.5 - StickFight` / `Bits64` / `Chainloader startup complete`，Unity 5.6.7）
+- 开发机游戏目录 `C:\SteamLibrary\steamapps\common\StickFightTheGame`；Managed 里有一堆手改副本
+  （`Assembly-CSharp.dll。blinkgod` 等），BepInEx 会当重复程序集加载并警告 —— 别当原版环境用
 
 ## 待办
 

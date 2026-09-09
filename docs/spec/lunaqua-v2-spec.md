@@ -300,6 +300,11 @@ interface IModTypeStrategy
    public build `24952802`、Windows 64 位 depot `674945`；安装目录 `StickFightTheGame`、
    exe `StickFight.exe`、数据目录 `StickFight_Data`（**目录名 ≠ exe 名，别按 installdir 推**）；
    该版本 Managed 里是 `UnityEngine.dll`（无 `UnityEngine.CoreModule.dll`），也没有 `data.unity3d`；
+   站上 pack 已实机核对（2026-09-09）：`/BepInEx/BepInEx_pack_x64_这个文件夹不应该出现.zip`（627,740 B）
+   = 官方 BepInEx 5.4.23.5 win_x64 的 **22 个文件（哈希全对）+ 预置 `BepInEx/config/BepInEx.cfg`**，共 23 文件，
+   清单随程序发布为 `data/bepinex-pack.json`；实机部署验证结论：**不必从 Steam 启动**——
+   把游戏复制到临时目录 → 部署 → 直接跑 `StickFight.exe` → `BepInEx/LogOutput.log` 里出现
+   `BepInEx 5.4.23.5` + `Bits64` + `Chainloader startup complete` 即成功（Unity 版本实测 5.6.7）；
 2. 静态更新目录的**主机/路径/上传凭据**待定（建议与 mod CI 的 SFTP 同源）；
 3. 官方构建指纹表的**生成与维护流程**（需持有游戏的账号跑 DepotDownloader）；
 4. 站上 **guest 写权限建议收紧**（安全）；
