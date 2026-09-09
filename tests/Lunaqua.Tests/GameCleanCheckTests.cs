@@ -19,6 +19,7 @@ public sealed class GameCleanCheckTests : IDisposable
         Add("StickFight_Data/Managed/Assembly-CSharp.dll", TestMod.Bytes("官方 Assembly-CSharp"));
         Add("StickFight_Data/Managed/UnityEngine.dll", TestMod.Bytes("官方 UnityEngine"));
         Add("StickFight_Data/globalgamemanagers", TestMod.Bytes("官方 globalgamemanagers"));
+        Add("StickFight_Data/level0", TestMod.Bytes("官方 level0"));
 
         _installation = GameInstallationValidator.Validate(_root);
         Assert.True(_installation.IsValid, _installation.Summary);
@@ -37,7 +38,7 @@ public sealed class GameCleanCheckTests : IDisposable
     {
         var service = new GameCleanCheckService(BuildTable("24952802"));
 
-        var result = await service.CheckAsync(_installation, "24952802", TestContext.Current.CancellationToken);
+        var result = await service.CheckAsync(_installation, "24952802", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(GameCleanStatus.Clean, result.Status);
         Assert.True(result.IsClean);
@@ -50,7 +51,7 @@ public sealed class GameCleanCheckTests : IDisposable
     {
         var service = new GameCleanCheckService(BuildTable("24952802"));
 
-        var result = await service.CheckAsync(_installation, "99999999", TestContext.Current.CancellationToken);
+        var result = await service.CheckAsync(_installation, "99999999", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(GameCleanStatus.Clean, result.Status);
         Assert.Equal("24952802", result.MatchedBuildId);
@@ -63,7 +64,7 @@ public sealed class GameCleanCheckTests : IDisposable
         var service = new GameCleanCheckService(BuildTable("24952802"));
         File.WriteAllText(Path.Combine(_root, "StickFight_Data", "Managed", "Assembly-CSharp.dll"), "被改过了");
 
-        var result = await service.CheckAsync(_installation, "99999999", TestContext.Current.CancellationToken);
+        var result = await service.CheckAsync(_installation, "99999999", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(GameCleanStatus.NeedsValidate, result.Status);
         Assert.False(result.IsClean);
@@ -74,9 +75,9 @@ public sealed class GameCleanCheckTests : IDisposable
     public async Task 命中本机信任基线判Trusted()
     {
         var service = new GameCleanCheckService(BuildTable("11111111", matchFiles: false));
-        await service.CaptureBaselineAsync(_installation, "99999999", TestContext.Current.CancellationToken);
+        await service.CaptureBaselineAsync(_installation, "99999999", cancellationToken: TestContext.Current.CancellationToken);
 
-        var result = await service.CheckAsync(_installation, "99999999", TestContext.Current.CancellationToken);
+        var result = await service.CheckAsync(_installation, "99999999", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(GameCleanStatus.Trusted, result.Status);
         Assert.True(result.IsClean);
@@ -87,12 +88,28 @@ public sealed class GameCleanCheckTests : IDisposable
     public async Task 基线之后文件又被改了就不算Trusted()
     {
         var service = new GameCleanCheckService(BuildTable("11111111", matchFiles: false));
-        await service.CaptureBaselineAsync(_installation, "99999999", TestContext.Current.CancellationToken);
+        await service.CaptureBaselineAsync(_installation, "99999999", cancellationToken: TestContext.Current.CancellationToken);
         File.WriteAllText(Path.Combine(_root, "StickFight_Data", "Managed", "Assembly-CSharp.dll"), "又改了");
 
-        var result = await service.CheckAsync(_installation, "99999999", TestContext.Current.CancellationToken);
+        var result = await service.CheckAsync(_installation, "99999999", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(GameCleanStatus.NeedsValidate, result.Status);
+    }
+
+    [Fact]
+    public async Task 被mod覆盖的文件可以排除在比对之外()
+    {
+        var service = new GameCleanCheckService(BuildTable("24952802"));
+        File.WriteAllText(Path.Combine(_root, "StickFight_Data", "level0"), "被 UVFS 覆盖的 level0");
+
+        var excluded = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "StickFight_Data/level0" };
+        var result = await service.CheckAsync(
+            _installation,
+            "99999999",
+            excluded,
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        Assert.Equal(GameCleanStatus.Clean, result.Status);
     }
 
     [Fact]
@@ -101,7 +118,7 @@ public sealed class GameCleanCheckTests : IDisposable
         var service = new GameCleanCheckService(BuildTable());
         var broken = new GameInstallation(_root, null, null, false, ["没有 exe"]);
 
-        var result = await service.CheckAsync(broken, null, TestContext.Current.CancellationToken);
+        var result = await service.CheckAsync(broken, null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(GameCleanStatus.Unknown, result.Status);
     }

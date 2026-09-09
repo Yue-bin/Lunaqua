@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "appId": "674940",
-  "updatedAt": "2026-09-09T12:31:04.241Z",
+  "updatedAt": "2026-09-09T12:42:06.754Z",
   "note": "官方构建指纹表。由 docs/tools/fingerprint/wizard.sh 生成/追加；哈希来自 Steam 校验后的本机文件或 DepotDownloader 拉下来的官方 depot 文件。files 为空表示只登记了 buildid（第一层判定可用，哈希层不可用）。",
   "builds": [
     {
@@ -10,7 +10,7 @@
       "manifest": "8864248428190094911",
       "exe": "StickFight.exe",
       "dataDir": "StickFight_Data",
-      "capturedAt": "2026-09-09T20:31:04+08:00",
+      "capturedAt": "2026-09-09T20:42:06+08:00",
       "source": "local-capture",
       "files": [
         {
@@ -37,6 +37,11 @@
           "path": "StickFight_Data/globalgamemanagers",
           "sha256": "698f95c2ecb8583bb6f770c837048da52516c74d48e795beb9cc3fd155af3bb6",
           "size": 101808
+        },
+        {
+          "path": "StickFight_Data/level0",
+          "sha256": "00f18367794beda3d551484a99531fb4d342c217df56255cce72d1a614337f42",
+          "size": 114364648
         }
       ]
     }

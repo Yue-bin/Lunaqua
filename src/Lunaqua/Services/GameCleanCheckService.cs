@@ -30,9 +30,13 @@ public sealed class GameCleanCheckService
 
     /// <param name="installation">已校验过结构的游戏安装。</param>
     /// <param name="buildId">appmanifest 里的 buildid；没有就传 null。</param>
+    /// <param name="excludedPaths">
+    /// 不参与比对的相对路径 —— 通常是「已经被已装 mod 覆盖」的文件（例如 UVFS 覆盖层改了 level0）。
+    /// </param>
     public async Task<GameCleanCheckResult> CheckAsync(
         GameInstallation installation,
         string? buildId,
+        IReadOnlySet<string>? excludedPaths = null,
         CancellationToken cancellationToken = default)
     {
         if (installation.ExecutablePath is null)
@@ -53,9 +57,9 @@ public sealed class GameCleanCheckService
         }
 
         // ② 文件哈希比对
-        var hashes = await HashKnownFilesAsync(installation, cancellationToken);
+        var hashes = await HashKnownFilesAsync(installation, excludedPaths, cancellationToken);
 
-        if (_table.MatchByHashes(hashes) is { } byHash)
+        if (_table.MatchByHashes(hashes, excludedPaths) is { } byHash)
         {
             _log.Information("干净判定：文件哈希命中官方构建 {BuildId}", byHash.BuildId);
             return new GameCleanCheckResult(
@@ -97,7 +101,7 @@ public sealed class GameCleanCheckService
         string? buildId,
         CancellationToken cancellationToken = default)
     {
-        var hashes = await HashKnownFilesAsync(installation, cancellationToken);
+        var hashes = await HashKnownFilesAsync(installation, null, cancellationToken);
         var baseline = new TrustedBaseline(
             TrustedBaseline.CurrentSchema,
             buildId,
@@ -149,12 +153,18 @@ public sealed class GameCleanCheckService
     /// <summary>按指纹表登记的文件路径算 sha256（键固定用表里的相对路径）。</summary>
     public async Task<IReadOnlyDictionary<string, string>> HashKnownFilesAsync(
         GameInstallation installation,
+        IReadOnlySet<string>? excludedPaths = null,
         CancellationToken cancellationToken = default)
     {
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var relative in FilePaths(installation))
         {
+            if (excludedPaths is not null && excludedPaths.Contains(relative))
+            {
+                continue;
+            }
+
             var full = ResolveLocalPath(installation, relative);
             if (full is null)
             {
@@ -184,6 +194,8 @@ public sealed class GameCleanCheckService
             $"{dataDir}/Managed/Assembly-CSharp.dll",
             $"{dataDir}/Managed/UnityEngine.dll",
             $"{dataDir}/globalgamemanagers",
+            // Unity 主场景/资源包：有 mod 会覆盖它，指纹里必须带上
+            $"{dataDir}/level0",
         ];
     }
 

@@ -40,7 +40,8 @@ for rel in \
   "$DATA_DIR/Managed/Assembly-CSharp.dll" \
   "$DATA_DIR/Managed/UnityEngine.dll" \
   "$DATA_DIR/Managed/Assembly-CSharp-firstpass.dll" \
-  "$DATA_DIR/globalgamemanagers"
+  "$DATA_DIR/globalgamemanagers" \
+  "$DATA_DIR/level0"
 do
   path="$GAME_DIR/$rel"
   [ -f "$path" ] || continue

@@ -67,7 +67,8 @@ docs\tools\fingerprint\wizard.cmd
 }
 ```
 
-- `files` 至少含 exe 与 `Assembly-CSharp.dll`；有就一起收 `UnityEngine.dll`、`globalgamemanagers`。
+- `files` 至少含 exe 与 `Assembly-CSharp.dll`；有就一起收 `UnityEngine.dll`、`globalgamemanagers`、
+  **`level0`**（Unity 主场景/资源包，109MB；有 mod 会覆盖它，所以必须进指纹）。
 - `files` 为空 = 只登记了 buildid（第 ① 层「buildid 命中」可用，第 ② 层哈希比对跳过）。
 - 同一 buildid 重复采集会覆盖旧行。
 
@@ -87,7 +88,10 @@ node docs/tools/fingerprint/merge-fingerprint.mjs data/game-fingerprints.json <�
 - 安装目录名是 `StickFightTheGame`，但 exe 叫 `StickFight.exe`、Data 目录叫 `StickFight_Data`
   （所以「`<exe名>_Data`」规则成立，别按 installdir 推）
 - 这版 Unity 布局是老的：Managed 里是 `UnityEngine.dll`，**没有** `UnityEngine.CoreModule.dll`，
-  也没有 `data.unity3d`
+  也没有 `data.unity3d`；主场景是 `StickFight_Data/level0`（109MB）
+- 有 mod 会落位覆盖 `level0`（暂时不兼容 64 位，所以本机是原版）；干净判定支持把
+  「已被已装 mod 覆盖的文件」排除出比对（`GameCleanCheckService.CheckAsync(..., excludedPaths)`），
+  等 M6 接上凭证里的落位清单后自动填这个参数
 - 32 位旧 depot 是 674941（只在玩家没更新到 64 位时才会用到）
 
 ## 注意

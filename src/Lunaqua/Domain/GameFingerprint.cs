@@ -37,8 +37,16 @@ public sealed record GameFingerprintTable(int Schema, string AppId, IReadOnlyLis
     public GameFingerprint? FindByBuildId(string? buildId) =>
         Builds.FirstOrDefault(build => build.MatchesBuildId(buildId));
 
-    /// <summary>本机哈希是否与表里某个构建完全一致（表里登记的文件必须全部命中）。</summary>
-    public GameFingerprint? MatchByHashes(IReadOnlyDictionary<string, string> localHashes)
+    /// <summary>
+    /// 本机哈希是否与表里某个构建完全一致（表里登记的文件必须全部命中）。
+    /// </summary>
+    /// <param name="localHashes">相对路径 → sha256。</param>
+    /// <param name="excludedPaths">
+    /// 要跳过的路径（例如已被 mod 落位覆盖的 level0），跳过的不参与比对。
+    /// </param>
+    public GameFingerprint? MatchByHashes(
+        IReadOnlyDictionary<string, string> localHashes,
+        IReadOnlySet<string>? excludedPaths = null)
     {
         foreach (var build in Builds)
         {
@@ -47,7 +55,16 @@ public sealed record GameFingerprintTable(int Schema, string AppId, IReadOnlyLis
                 continue;
             }
 
-            var allMatch = build.Files.All(file =>
+            var files = excludedPaths is null
+                ? build.Files
+                : [.. build.Files.Where(file => !excludedPaths.Contains(file.Path))];
+
+            if (files.Count == 0)
+            {
+                continue;
+            }
+
+            var allMatch = files.All(file =>
                 localHashes.TryGetValue(file.Path, out var hash)
                 && string.Equals(hash, file.Sha256, StringComparison.OrdinalIgnoreCase));
 
