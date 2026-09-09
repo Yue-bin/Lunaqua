@@ -1,5 +1,6 @@
 using Serilog;
 using Velopack;
+using Velopack.Locators;
 using Velopack.Logging;
 using Velopack.Sources;
 
@@ -49,22 +50,30 @@ public sealed class VelopackUpdateService : IUpdateService
     public const string UpdateUrlEnvVar = "LUNAQUA_UPDATE_URL";
 
     private readonly IUpdateSource _source;
+    private readonly IVelopackLocator? _locator;
     private readonly ILogger _log;
     private readonly Lazy<UpdateManager?> _manager;
     private readonly Dictionary<string, (VelopackAsset Asset, UpdateInfo? Info)> _known = new(StringComparer.Ordinal);
 
     public VelopackUpdateService(string? updateUrl = null, ILogger? log = null)
+        : this(
+            new SimpleWebSource(updateUrl
+                ?? Environment.GetEnvironmentVariable(UpdateUrlEnvVar)
+                ?? DefaultUpdateUrl),
+            locator: null,
+            log)
     {
+    }
+
+    /// <summary>测试用：直接指定更新源与定位器（联调真实打包产物）。</summary>
+    public VelopackUpdateService(IUpdateSource source, IVelopackLocator? locator = null, ILogger? log = null)
+    {
+        _source = source;
+        _locator = locator;
         _log = log ?? Log.ForContext<VelopackUpdateService>();
-
-        var url = updateUrl
-            ?? Environment.GetEnvironmentVariable(UpdateUrlEnvVar)
-            ?? DefaultUpdateUrl;
-
-        _source = new SimpleWebSource(url);
         _manager = new Lazy<UpdateManager?>(CreateManager);
 
-        _log.Information("更新源 {Url}，当前版本 {Version}，安装版 {Installed}", url, CurrentVersion, IsInstalled);
+        _log.Information("更新源 {Source}，当前版本 {Version}，安装版 {Installed}", source.GetType().Name, CurrentVersion, IsInstalled);
     }
 
     public string CurrentVersion =>
@@ -158,7 +167,7 @@ public sealed class VelopackUpdateService : IUpdateService
     {
         try
         {
-            return new UpdateManager(_source, new UpdateOptions { AllowVersionDowngrade = true });
+            return new UpdateManager(_source, new UpdateOptions { AllowVersionDowngrade = true }, _locator);
         }
         catch (Exception ex)
         {
