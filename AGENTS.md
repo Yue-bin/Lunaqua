@@ -39,7 +39,9 @@
 
 ## 待办
 
-1. **M3 BepInEx 全自动代装** —— 定位游戏（注册表 → libraryfolders.vdf → appmanifest）、PE 判位数、干净判定三层（buildid / 官方指纹表 / 本机首扫基线）、备份、部署 5.4.23.5 win_x64、`LogOutput.log` 验证与一键回滚 + 三步 UI（规格书 §8）
+1. **M3 BepInEx 全自动代装**（进行中）—— 已完成：Steam 库定位（注册表 → libraryfolders.vdf → appmanifest）、PE 判位数、游戏目录结构校验；
+   待做：干净判定三层（buildid / 官方指纹表 / 本机首扫基线）、备份、部署 5.4.23.5 win_x64、`LogOutput.log` 验证与一键回滚 + 三步 UI（规格书 §8）
+   - 卡点：官方构建指纹表还没有（需要持游戏的账号跑 DepotDownloader，规格书 §13 风险 3）→ 先做第 ①③ 层
 2. **M4–M6** —— 见规格书 §12 里程碑表
    - 已完成：M0（骨架）、M1（站点与元数据）、M2（生命周期引擎 + 详情页动作）
    - 还没做：手动纳管（§7.5）、UVFS 冲突提示、错误话术、日志导出（M6）
