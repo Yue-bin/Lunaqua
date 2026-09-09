@@ -52,6 +52,8 @@ public partial class App : Application
         services.AddSingleton(GameFingerprintTableLoader.Load());
         services.AddSingleton<GameCleanCheckService>();
         services.AddSingleton<SteamLibraryLocator>();
+        services.AddSingleton<ConfigEditorService>();
+        services.AddSingleton<ConfigTabViewModel>();
         services.AddSingleton(provider => new BepInExInstaller(
             provider.GetRequiredService<IBepInExPackSource>(),
             provider.GetRequiredService<IGameLauncher>(),

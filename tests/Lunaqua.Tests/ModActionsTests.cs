@@ -188,7 +188,7 @@ public sealed class ModActionsTests : IDisposable
         var engine = new InstallEngine(client, new ModTypeStrategies(), credentials, _cache, new FakeProcessDetector { Running = gameRunning });
         var installed = new InstalledModService(credentials, engine);
         var queue = new TaskQueue();
-        var detail = new ModDetailViewModel(repository, engine, installed, _settings, queue);
+        var detail = new ModDetailViewModel(repository, engine, installed, _settings, queue, TestVms.ConfigTab(_settings));
         var library = new ModLibraryViewModel(repository, installed, _settings, detail);
 
         return (detail, library, engine);

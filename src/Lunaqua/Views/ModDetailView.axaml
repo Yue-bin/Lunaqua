@@ -92,7 +92,69 @@
 
         <!-- 配置 -->
         <TabItem Header="配置">
-          <TextBlock Classes="hint" Text="{Binding ConfigHint}" Margin="12" />
+          <DockPanel Margin="12">
+            <TextBlock DockPanel.Dock="Top" Classes="hint" Text="{Binding Config.EffectHint}" />
+
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="0,10,0,6">
+              <CheckBox Content="只看已改动项" IsChecked="{Binding Config.OnlyChanged}" />
+              <Button Content="全部重置" Command="{Binding Config.ResetAllCommand}" />
+              <Button Content="重新载入" Command="{Binding Config.ReloadCommand}" />
+              <Button Content="启动游戏" Command="{Binding Config.LaunchGameCommand}"
+                      IsVisible="{Binding Config.HasNoConfig}" />
+            </StackPanel>
+
+            <TextBlock DockPanel.Dock="Top" Classes="hint" Text="{Binding Config.StatusText}" Margin="0,0,0,8" />
+
+            <ScrollViewer>
+              <ItemsControl ItemsSource="{Binding Config.Entries}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="vm:ConfigEntryViewModel">
+                    <Border Classes="card" Margin="0,0,0,8">
+                      <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding Description}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                        <TextBlock Classes="hint" Text="{Binding Key}" />
+                        <TextBlock Classes="hint" Text="{Binding RangeHint}" IsVisible="{Binding HasRange}" />
+
+                        <ToggleSwitch IsChecked="{Binding BoolValue, Mode=TwoWay}"
+                                      IsVisible="{Binding IsBoolean}"
+                                      IsEnabled="{Binding IsEditable}" />
+
+                        <NumericUpDown Value="{Binding NumberValue, Mode=TwoWay}"
+                                       Minimum="{Binding Minimum}"
+                                       Maximum="{Binding Maximum}"
+                                       ShowButtonSpinner="False"
+                                       IsVisible="{Binding IsNumber}"
+                                       IsEnabled="{Binding IsEditable}" />
+
+                        <ComboBox ItemsSource="{Binding Options}"
+                                  SelectedItem="{Binding SelectedOption, Mode=TwoWay}"
+                                  IsVisible="{Binding IsEnum}"
+                                  IsEnabled="{Binding IsEditable}" />
+
+                        <TextBox Text="{Binding Text, Mode=TwoWay}"
+                                 PlaceholderText="{Binding Placeholder}"
+                                 IsVisible="{Binding IsText}"
+                                 IsEnabled="{Binding IsEditable}"
+                                 LostFocus="OnEntryTextLostFocus"
+                                 KeyDown="OnEntryKeyDown" />
+
+                        <TextBlock Text="{Binding ErrorText}"
+                                   Foreground="{DynamicResource WarningBrush}"
+                                   TextWrapping="Wrap"
+                                   FontSize="12"
+                                   IsVisible="{Binding HasError}" />
+
+                        <Button Content="重置"
+                                Command="{Binding ResetCommand}"
+                                IsEnabled="{Binding IsEditable}"
+                                HorizontalAlignment="Left" />
+                      </StackPanel>
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+          </DockPanel>
         </TabItem>
 
         <!-- 版本 -->

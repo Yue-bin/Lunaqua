@@ -45,8 +45,8 @@
 
 ## 待办
 
-1. **M4 配置编辑器** —— `.cfg` 行式解析/写回、按类型生成控件（Boolean/数值/枚举/KeyboardShortcut/Color）、
-   「只看已改动项」/重置/备份/游戏运行中只读（规格书 §9）
+1. **M5 自更新** —— Velopack 1.2.0 打包、GH Actions tag 流水线、静态更新源、设置页「回退到上一版」
+   （规格书 §11；**需要人工**：静态更新目录的主机/路径/上传凭据，规格书 §13 风险 2）
    - 官方构建指纹表：`bash docs/tools/fingerprint/wizard.sh`（6 站向导，见 `docs/tools/fingerprint/README.md`）；
      当前 build `24952802` / depot `674945` 的元数据已登记在 `data/game-fingerprints.json`，哈希待采
    - 实机事实：安装目录 `StickFightTheGame`，但 exe 是 `StickFight.exe`、数据目录 `StickFight_Data`

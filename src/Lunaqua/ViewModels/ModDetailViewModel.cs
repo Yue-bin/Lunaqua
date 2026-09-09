@@ -64,14 +64,19 @@ public sealed partial class ModDetailViewModel : ViewModelBase
         InstallEngine engine,
         InstalledModService installed,
         ISettingsService settings,
-        TaskQueue queue)
+        TaskQueue queue,
+        ConfigTabViewModel config)
     {
         _repository = repository;
         _engine = engine;
         _installed = installed;
         _settings = settings;
         _queue = queue;
+        Config = config;
     }
+
+    /// <summary>「配置」tab 的 ViewModel。</summary>
+    public ConfigTabViewModel Config { get; }
 
     /// <summary>安装/卸载/启停之后通知列表刷新状态。</summary>
     public event EventHandler? StateChanged;
@@ -128,6 +133,7 @@ public sealed partial class ModDetailViewModel : ViewModelBase
         }
 
         RefreshState();
+        Config.Load(entry.Info.Guid, entry.Info.Id);
 
         ReadmeText = string.Empty;
         IsLoadingReadme = true;

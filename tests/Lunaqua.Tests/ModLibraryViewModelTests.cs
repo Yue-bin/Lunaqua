@@ -103,7 +103,11 @@ public sealed class ModLibraryViewModelTests
         var settings = new SettingsService(Path.Combine(Path.GetTempPath(), "lunaqua-library-tests", Guid.NewGuid().ToString("N"), "settings.json"));
         settings.Load();
 
-        return new ModLibraryViewModel(repository, installed, settings, new ModDetailViewModel(repository, engine, installed, settings, new TaskQueue()));
+        return new ModLibraryViewModel(
+            repository,
+            installed,
+            settings,
+            new ModDetailViewModel(repository, engine, installed, settings, new TaskQueue(), TestVms.ConfigTab(settings)));
     }
 
     private static async Task WaitUntilAsync(Func<bool> condition, int timeoutMs = 10000)
