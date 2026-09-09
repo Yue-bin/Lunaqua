@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentIcons.Common;
+using Lunaqua.Services;
 
 namespace Lunaqua.ViewModels;
 
@@ -18,12 +19,18 @@ public sealed partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private bool _isDrawerOpen;
 
+    [ObservableProperty]
+    private bool _isBusy;
+
     public MainWindowViewModel(
         HomeViewModel home,
         ModLibraryViewModel modLibrary,
         WizardViewModel wizard,
-        SettingsViewModel settings)
+        SettingsViewModel settings,
+        TaskQueue queue)
     {
+        queue.BusyChanged += (_, _) => IsBusy = queue.IsBusy;
+
         _pages = new Dictionary<string, ViewModelBase>(StringComparer.Ordinal)
         {
             ["home"] = home,

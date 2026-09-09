@@ -21,6 +21,22 @@ internal sealed class FakeModSite
         Requests++;
         var path = request.RequestUri!.AbsolutePath;
 
+        if (path.EndsWith("/api/fs/list", StringComparison.Ordinal))
+        {
+            var directories = _files.Keys
+                .Select(key => key.TrimStart('/').Split('/')[0])
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(name => name, StringComparer.Ordinal)
+                .ToArray();
+
+            return FakeHttp.Envelope(new
+            {
+                content = directories.Select(FakeHttp.Dir).ToArray(),
+                total = directories.Length,
+                write = false,
+            });
+        }
+
         if (path.EndsWith("/api/fs/get", StringComparison.Ordinal))
         {
             var target = JsonDocument.Parse(string.IsNullOrEmpty(body) ? "{}" : body).RootElement;

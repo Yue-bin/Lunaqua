@@ -1,6 +1,7 @@
 using Lunaqua.Infrastructure.OpenList;
 using Lunaqua.Services;
 using Lunaqua.ViewModels;
+using Lunaqua.Domain;
 using Xunit;
 
 namespace Lunaqua.Tests;
@@ -94,8 +95,15 @@ public sealed class ModLibraryViewModelTests
 
     private static ModLibraryViewModel CreateLibrary(HttpClient http)
     {
-        var repository = new ModRepository(new OpenListClient(http));
-        return new ModLibraryViewModel(repository, new ModDetailViewModel(repository));
+        var client = new OpenListClient(http);
+        var repository = new ModRepository(client);
+        var credentials = new CredentialStore();
+        var engine = new InstallEngine(client, new ModTypeStrategies(), credentials, new CacheStore(), new FakeProcessDetector());
+        var installed = new InstalledModService(credentials, engine);
+        var settings = new SettingsService(Path.Combine(Path.GetTempPath(), "lunaqua-library-tests", Guid.NewGuid().ToString("N"), "settings.json"));
+        settings.Load();
+
+        return new ModLibraryViewModel(repository, installed, settings, new ModDetailViewModel(repository, engine, installed, settings, new TaskQueue()));
     }
 
     private static async Task WaitUntilAsync(Func<bool> condition, int timeoutMs = 10000)

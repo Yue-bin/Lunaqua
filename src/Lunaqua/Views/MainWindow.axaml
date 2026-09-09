@@ -64,6 +64,16 @@
         </StackPanel>
       </Border>
 
+      <Border DockPanel.Dock="Bottom"
+              IsVisible="{Binding IsBusy}"
+              Background="{DynamicResource CodeBackgroundBrush}"
+              Padding="12,6">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <ic:FluentIcon Icon="ArrowSync" IconSize="Size16" />
+          <TextBlock Text="正在处理，请稍候…" FontSize="12" VerticalAlignment="Center" />
+        </StackPanel>
+      </Border>
+
       <ContentControl Content="{Binding CurrentPage}" />
     </DockPanel>
   </DrawerPage>

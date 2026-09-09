@@ -25,6 +25,27 @@ internal static class TestMod
         return new ModVersion(Version(version), "2026-09-09", list, "测试版本");
     }
 
+    /// <summary>把元数据序列化成 info.json 文本（用于假站点）。</summary>
+    public static string ToJson(MetadataInfo info) => System.Text.Json.JsonSerializer.Serialize(new
+    {
+        schema = info.Schema,
+        id = info.Id,
+        type = info.Type,
+        guid = info.Guid,
+        name = info.Name,
+        author = info.Author,
+        description = info.Description,
+        latest = info.Latest.ToString(),
+        dependencies = info.Dependencies.Select(dependency => new { id = dependency.Id, minVersion = dependency.MinVersion?.ToString() }),
+        versions = info.Versions.Select(version => new
+        {
+            version = version.Version.ToString(),
+            released = version.Released,
+            files = version.Files.Select(file => new { path = file.Path, sha256 = file.Sha256, size = file.Size }),
+            changelog = version.Changelog,
+        }),
+    });
+
     public static MetadataInfo Info(
         string id = "stick.plugins.demo",
         string type = ModTypes.BepInEx,

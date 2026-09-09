@@ -197,6 +197,13 @@ public sealed class InstallEngine
         return updated;
     }
 
+    /// <summary>把凭证写回它当前所在的位置（例如改「忽略版本」）。</summary>
+    public void SaveCredential(GameContext game, InstalledMod credential)
+    {
+        var strategy = _strategies.Get(credential.Type);
+        _credentials.Write(ResolveCredentialPath(game, strategy, credential), credential);
+    }
+
     /// <summary>磁盘实况优先：文件在启用位置才算启用。</summary>
     public bool DetectEnabled(GameContext game, InstalledMod installed)
     {

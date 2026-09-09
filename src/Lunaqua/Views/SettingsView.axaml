@@ -56,7 +56,12 @@
           <Button Grid.Column="1" Content="打开数据目录" Command="{Binding OpenDataDirectoryCommand}" />
           <Button Grid.Column="2" Content="打开缓存目录" Command="{Binding OpenCacheDirectoryCommand}" />
         </Grid>
-        <TextBlock Classes="hint" Text="缓存按文件哈希复用；「清理缓存」在 M2 里程碑加上。" />
+        <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="8">
+          <TextBlock Grid.Column="0" Text="缓存：" VerticalAlignment="Center" />
+          <TextBlock Grid.Column="1" Text="{Binding CacheSizeText}" VerticalAlignment="Center" FontWeight="SemiBold" />
+          <Button Grid.Column="2" Content="清理缓存" Command="{Binding ClearCacheCommand}" HorizontalAlignment="Left" />
+        </Grid>
+        <TextBlock Classes="hint" Text="缓存按 sha256 复用下载过的文件，清理不影响已装的 mod。" />
       </StackPanel>
 
       <!-- 关于 -->

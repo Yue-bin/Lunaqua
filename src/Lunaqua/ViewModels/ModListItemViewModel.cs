@@ -1,13 +1,21 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using Lunaqua.Domain;
 
 namespace Lunaqua.ViewModels;
 
 /// <summary>Mod 库列表里的一项。</summary>
-public sealed class ModListItemViewModel
+public sealed partial class ModListItemViewModel : ObservableObject
 {
-    public ModListItemViewModel(CatalogEntry entry)
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StatusText))]
+    [NotifyPropertyChangedFor(nameof(HasUpdate))]
+    [NotifyPropertyChangedFor(nameof(IsInstalled))]
+    private ModInstallationState _state;
+
+    public ModListItemViewModel(CatalogEntry entry, ModInstallationState state)
     {
         Entry = entry;
+        _state = state;
         SearchHaystack = string.Join(
             '\n',
             entry.Info.Name,
@@ -32,6 +40,12 @@ public sealed class ModListItemViewModel
     public string TypeBadge => Info.TypeDisplayName;
 
     public string Subtitle => $"{Author} · v{LatestText} · {TypeBadge}";
+
+    public string StatusText => State.StatusText;
+
+    public bool HasUpdate => State.HasUpdate;
+
+    public bool IsInstalled => State.IsInstalled;
 
     public bool HasWarning => Entry.HasWarnings;
 

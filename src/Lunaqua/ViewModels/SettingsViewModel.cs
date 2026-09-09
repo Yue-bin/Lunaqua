@@ -12,7 +12,11 @@ public sealed partial class SettingsViewModel : ViewModelBase
 {
     private readonly ISettingsService _settings;
     private readonly IDialogService _dialogs;
+    private readonly CacheStore _cache;
     private readonly bool _initialized;
+
+    [ObservableProperty]
+    private string _cacheSizeText = "—";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(GameDirectoryText))]
@@ -26,10 +30,11 @@ public sealed partial class SettingsViewModel : ViewModelBase
     [ObservableProperty]
     private bool _checkUpdateOnStartup;
 
-    public SettingsViewModel(ISettingsService settings, IDialogService dialogs)
+    public SettingsViewModel(ISettingsService settings, IDialogService dialogs, CacheStore cache)
     {
         _settings = settings;
         _dialogs = dialogs;
+        _cache = cache;
 
         ThemeOptions =
         [
@@ -42,6 +47,7 @@ public sealed partial class SettingsViewModel : ViewModelBase
         _selectedTheme = ThemeOptions.FirstOrDefault(o => o.Value == settings.Current.Theme) ?? ThemeOptions[0];
         _checkUpdateOnStartup = settings.Current.CheckUpdateOnStartup;
         _initialized = true;
+        RefreshCacheSize();
     }
 
     public override string Title => "设置";
@@ -111,6 +117,33 @@ public sealed partial class SettingsViewModel : ViewModelBase
     {
         GameDirectory = null;
         _settings.Update(s => s.GameDirectory = null);
+    }
+
+    [RelayCommand]
+    private void ClearCache()
+    {
+        var freed = _cache.Clear();
+        RefreshCacheSize();
+        CacheSizeText = freed > 0 ? $"已清理 {FormatSize(freed)}" : "缓存本来就是空的";
+    }
+
+    private void RefreshCacheSize() => CacheSizeText = FormatSize(_cache.GetTotalSize());
+
+    private static string FormatSize(long bytes)
+    {
+        string[] units = ["B", "KB", "MB", "GB"];
+        double value = bytes;
+        var unit = 0;
+
+        while (value >= 1024 && unit < units.Length - 1)
+        {
+            value /= 1024;
+            unit++;
+        }
+
+        return unit == 0
+            ? $"{bytes} B"
+            : string.Create(System.Globalization.CultureInfo.InvariantCulture, $"{value:0.#} {units[unit]}");
     }
 
     [RelayCommand]

@@ -1,15 +1,21 @@
 using System.Globalization;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Lunaqua.Domain;
 
 namespace Lunaqua.ViewModels;
 
 /// <summary>详情页「版本」tab 的一项。</summary>
-public sealed class ModVersionViewModel
+public sealed partial class ModVersionViewModel : ObservableObject
 {
-    public ModVersionViewModel(ModVersion version, bool isLatest)
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(BadgeText))]
+    private bool _isInstalled;
+
+    public ModVersionViewModel(ModVersion version, bool isLatest, bool isInstalled = false)
     {
         Version = version;
         IsLatest = isLatest;
+        _isInstalled = isInstalled;
     }
 
     public ModVersion Version { get; }
@@ -18,7 +24,9 @@ public sealed class ModVersionViewModel
 
     public string VersionText => $"v{Version.Version}";
 
-    public string LatestBadge => IsLatest ? "最新" : string.Empty;
+    public string BadgeText => IsInstalled ? "已装" : IsLatest ? "最新" : string.Empty;
+
+    public bool HasBadge => BadgeText.Length > 0;
 
     public string ReleasedText => string.IsNullOrWhiteSpace(Version.Released) ? "未标注日期" : Version.Released;
 
