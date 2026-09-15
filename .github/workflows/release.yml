@@ -23,10 +23,7 @@ jobs:
         run: dotnet test Lunaqua.sln -c Release --nologo
 
       - name: 发布（自包含 win-x64）
-        run: >
-          dotnet publish src/Lunaqua/Lunaqua.csproj
-          -c Release -r win-x64 --self-contained true
-          -p:PublishSingleFile=false -o publish
+        run: dotnet publish src/Lunaqua/Lunaqua.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish
 
       - name: 安装 vpk
         run: dotnet tool install -g vpk
@@ -35,20 +32,11 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ github.ref_name }}".TrimStart("v")
-          if ($version -notmatch '^\\d+\\.\\d+\\.\\d+') {
+          if ($version -notmatch '^\d+\.\d+\.\d+') {
             Write-Error "tag 必须是 vX.Y.Z 形式，当前：${{ github.ref_name }}"
             exit 1
           }
-          vpk pack $back
-            --packId Lunaqua $back
-            --packVersion $version $back
-            --packTitle "Lunaqua" $back
-            --packAuthors "Yue-bin" $back
-            --packDir publish $back
-            --mainExe Lunaqua.exe $back
-            --icon Assets/avalonia-logo.ico $back
-            --channel win $back
-            --outputDir releases
+          vpk pack --packId Lunaqua --packVersion $version --packTitle Lunaqua --packAuthors Yue-bin --packDir publish --mainExe Lunaqua.exe --icon Assets/avalonia-logo.ico --channel win --outputDir releases
           Get-ChildItem releases | Format-Table Name, Length
 
       - uses: actions/upload-artifact@v4
@@ -56,18 +44,57 @@ jobs:
           name: velopack-releases
           path: releases/
 
-      # ── 上传（需要人工配置，规格书 §11 / §13 风险 2）──────────────────────
-      # releases/ 里的 releases.win.json + *.nupkg + Setup.exe 要传到静态更新目录
-      # （Caddy 托管、无 sign），例如 https://blog.monblog.top/lunaqua/updates；
-      # 再把最新 Setup.exe + readme 传到 OpenList 站的 Lunaqua/ 目录（只留最近 3 版）。
-      #
-      # 需要的仓库 secrets（Settings → Secrets and variables → Actions）：
-      #   UPDATE_HOST / UPDATE_USER / UPDATE_SSH_KEY / UPDATE_PATH
-      # 配好后取消下面注释并补上传输命令：
-      #
-      # - name: 上传到静态更新目录
-      #   shell: pwsh
-      #   env:
-      #     SSH_KEY: ${{ secrets.UPDATE_SSH_KEY }}
-      #   run: |
-      #     ...
+      # ── 上传到静态更新目录（规格书 §11 / §13 风险 2）─────────────────────
+      # 需要的仓库 secrets（Settings → Secrets and variables → Actions → New repository secret）：
+      #   UPDATE_HOST     服务器主机名或 IP，**【不带端口】**   例：blog.monblog.top
+      #   UPDATE_PORT     SSH 端口（你的 sshd 是 12322）        例：12322
+      #   UPDATE_USER     SSH 登录用户                          例：deploy
+      #   UPDATE_SSH_KEY  部署私钥**全文**（含 BEGIN/END 行）    例：-----BEGIN OPENSSH PRIVATE KEY-----
+      #   UPDATE_PATH     Caddy 映射到 /lunaqua/updates 的目录   例：/var/www/lunaqua/updates
+      # 没配（UPDATE_HOST 为空）时这步自动跳过，不会让流水线红。
+      - name: 上传更新源
+        if: ${{ secrets.UPDATE_HOST != '' }}
+        shell: pwsh
+        env:
+          DEPLOY_HOST: ${{ secrets.UPDATE_HOST }}
+          DEPLOY_PORT: ${{ secrets.UPDATE_PORT }}
+          DEPLOY_USER: ${{ secrets.UPDATE_USER }}
+          DEPLOY_KEY: ${{ secrets.UPDATE_SSH_KEY }}
+          DEPLOY_PATH: ${{ secrets.UPDATE_PATH }}
+        run: |
+          $port = if ($env:DEPLOY_PORT) { $env:DEPLOY_PORT } else { "22" }
+          $keyPath = Join-Path $env:RUNNER_TEMP "lunaqua_deploy_key"
+
+          # 私钥必须 LF 结尾：直接从 secret 写进文件会带 CRLF，ssh 会报 invalid format
+          [IO.File]::WriteAllText($keyPath, ($env:DEPLOY_KEY -replace [char]13, "").TrimEnd() + [char]10)
+          icacls $keyPath /inheritance:r /grant:r "$($env:USERNAME):R" | Out-Null
+
+          $target = "$($env:DEPLOY_USER)@$($env:DEPLOY_HOST)"
+          ssh -p $port -i $keyPath -o StrictHostKeyChecking=accept-new $target "mkdir -p '$($env:DEPLOY_PATH)'"
+
+          # 更新源只需要 feed + 差分包；Portable.zip 与 Setup.exe 不进这里
+          $files = @(Get-ChildItem releases/*.json, releases/*.nupkg)   # feed + 差分包
+          scp -P $port -i $keyPath -o StrictHostKeyChecking=accept-new @files "${target}:$($env:DEPLOY_PATH)/"
+          Write-Host "已上传 $($files.Count) 个文件到 $($env:DEPLOY_PATH)"
+
+      # ── 上传安装包到 OpenList 站（可选，规格书 §11：只留最近 3 版）────────
+      # 额外 secret：UPDATE_STATION_PATH —— 站上 Lunaqua/ 目录在服务器上的真实路径
+      #   例：/var/lib/openlist/data/stick_mods/Lunaqua
+      - name: 上传安装包到站上
+        if: ${{ secrets.UPDATE_STATION_PATH != '' }}
+        shell: pwsh
+        env:
+          DEPLOY_HOST: ${{ secrets.UPDATE_HOST }}
+          DEPLOY_PORT: ${{ secrets.UPDATE_PORT }}
+          DEPLOY_USER: ${{ secrets.UPDATE_USER }}
+          DEPLOY_KEY: ${{ secrets.UPDATE_SSH_KEY }}
+          STATION_PATH: ${{ secrets.UPDATE_STATION_PATH }}
+        run: |
+          $port = if ($env:DEPLOY_PORT) { $env:DEPLOY_PORT } else { "22" }
+          $keyPath = Join-Path $env:RUNNER_TEMP "lunaqua_deploy_key"
+          [IO.File]::WriteAllText($keyPath, ($env:DEPLOY_KEY -replace [char]13, "").TrimEnd() + [char]10)
+          icacls $keyPath /inheritance:r /grant:r "$($env:USERNAME):R" | Out-Null
+
+          $target = "$($env:DEPLOY_USER)@$($env:DEPLOY_HOST)"
+          ssh -p $port -i $keyPath -o StrictHostKeyChecking=accept-new $target "mkdir -p '$($env:STATION_PATH)'"
+          scp -P $port -i $keyPath -o StrictHostKeyChecking=accept-new releases/Lunaqua-win-Setup.exe "${target}:$($env:STATION_PATH)/"
