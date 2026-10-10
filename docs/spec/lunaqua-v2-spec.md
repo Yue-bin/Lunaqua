@@ -19,7 +19,9 @@
 - 管理两类 mod：BepInEx 插件（dll）与 UVFS 覆盖层资源 mod；
 - 自身自动更新（Velopack 差分）。
 
-**明确不做**：多游戏 / 多实例、多语言（中文 only）、macOS（后续版本）、UVFS `root_` 暗门、自动更新 mod（必须玩家点）、mod 制作与打包工具链。
+**明确不做**：多游戏 / 多实例、多语言（中文 only）、UVFS `root_` 暗门、自动更新 mod（必须玩家点）、mod 制作与打包工具链。
+
+**范围变更（2026-10-11）**：macOS / Linux 从「非目标」升为**后续里程碑**（§12 M8，平台事实与缺口见 §14）；另新增**站点发布侧**（上传服务，§12 M7 / §15）。
 
 > 依据：工单 01–08、11–13；原型决议见工单 07。
 
@@ -84,6 +86,7 @@
 | `name` / `author` / `description` | string | ✓ | 全部来自 readme（见 4.4）；description 为纯文本短文案。**`author` 为空时容忍**（界面显示「未知作者」，仅告警）：站上 8/9 个存量 mod 的 readme 没有作者小节 |
 | `latest` | string | ✓ | 必须是 `versions[]` 中存在的版本号 |
 | `dependencies` | array | ✓（可为空） | `[{ id, minVersion? }]`，CI 从 BepInDependency 解析 |
+| `platforms` | array | — | 支持平台，取值 `windows` / `macos`；**缺省 `["windows"]`**（声明 `macos` 是主动承诺，须实测过）。`windows` 同时覆盖 Linux/SteamOS —— Proton 跑的就是同一份 Windows 构建（§14），所以不为 Linux 单列取值。`uvfs` / `uvfs-framework` 恒为 `["windows"]`（原生层是 MinHook 钩 ntdll，没有 mac 版） |
 | `versions` | array | ✓ | 每项 `{ version, released, files[], changelog? }` |
 | `versions[].version` | string | ✓ | **SemVer 2.0.0（含 `-rc.1` 预发布后缀）**；必须同时等于 dll 内嵌 BepInPlugin.Version 与 git tag，任一不一致 **CI 直接失败** |
 | `versions[].released` | string | ✓ | git tag 日期（ISO 8601） |
@@ -144,10 +147,13 @@ CI 解析 readme 生成文案字段：H1 → `name`；`## 作者` → `author`�
 2. **没有 `/api/fs/read`** → 读 readme 必须 `fs/get` 拿 raw_url 再 GET；`fs/list` 的 `readme` 字段恒空。
 3. **没有搜索**（本站 `search_index=none`，`code 404`）→ 搜索走本地缓存的目录树。
 4. **sign 每次会话重取，不要持久化**（站长轮换 Token 会让旧 sign 全部失效）；本站 sign 为 `:0`（不过期）。
-5. **真实路径含 guest base_path `/stick_mods`** → 拼 `/d/` 必须用真实路径；用 `raw_url` 最省事。
+5. **`base_path` 有两副面孔**：API 的 `path` 参数**相对该账号的 `base_path`**（guest 是 `/stick_mods`，所以列站根要传 `path:"/"`；传 `/stick_mods` 会 `code 500 object not found`）；而 `/d/` 直链必须用**含 base_path 的真实路径** —— 用 `fs/get` 取 `raw_url` 最省事。发布服务同理：写 `<mod id>/x.dll` 要发 `/stick.plugins.foo/x.dll`，不能带 `/stick_mods` 前缀。
 6. **中文文件名**：`Content-Disposition` 的 `filename=` 是百分比编码，`filename*=utf-8''` 才是明文。
 7. 并发控制在 2–4，失败指数退避（服务端有限流中间件）。
-8. 安全建议：本站 guest 有写权限（`write:true`），**建议站长收紧**；客户端只读，永不调用写端点。
+8. **guest 权限已核实为「无写权限」**（2026-10-11）：匿名 `GET /api/me` → `permission: 20482`，按 OpenList
+   `internal/model/user.go` 的位定义解码 = 免密访问 + 读压缩包 + 分享，**写位（上传/改名/移动/复制/删除/WebDAV 写/FTP 写）全为 0**；
+   实测 `fs/put`、`fs/mkdir`、`fs/rename`、`fs/batch_rename` 匿名一律 `code 403 permission denied`，WebDAV `PROPFIND /dav/` 匿名 401。
+   ⚠️ **`fs/list` 响应里的 `write:true` 不是当前用户的写权限**（站点/存储维度字段）—— 本规格书旧版曾据此误判，客户端不得用它做权限判断。
 
 > 依据：工单 02（含完整实测表）。
 
@@ -297,6 +303,10 @@ interface IModTypeStrategy
 | **M4 配置编辑器** | .cfg 解析/写回；控件映射（含 KeyboardShortcut/Color）；过滤/重置/备份/只读 | 改 playermanager 的 GuiScale 生效且注释不丢；游戏运行中拒绝写 |
 | **M5 自更新** | Velopack 打包；GH Actions tag 流水线；静态源；站上目录；回退按钮 | 装旧版能自动更新到新版并提示重启；回退按钮可用 |
 | **M6 打磨** | UVFS 冲突提示、手动纳管、错误话术、测试补齐、日志导出 | 覆盖率达标；小白可用性走查通过 |
+| **M7 发布侧** | 上传页 + 发布服务：鉴权、dll 探针（Cecil 读 BepInPlugin）、readme 派生元数据、服务端校验、同版本冲突打回、组合包拆成 bepinex+uvfs 两条目、staging→info.json 原子提交、审计；CI token 通道 | modder 能自己传新版本；同版本号重传被打回；站上 info.json 由服务生成且可逐字节比对 |
+| **M8 跨平台** | Linux/Proton 与 macOS：非 Windows 的 Steam 库定位、大小写敏感路径比较、启动方式、macOS 的 BepInEx 包与指纹表、`platforms` 字段过滤、macOS 分发（签名/公证） | Linux/Proton 能装能启；macOS 至少能定位游戏 + 装 BepInEx + 跑通一个托管插件（UVFS 不支持，见 §14） |
+
+> **顺序**：M6 → M7 → M8。M7 先做（离线可测，不依赖人工机器）；M8 里「Linux/Proton」成本远低于「macOS 原生」，可先做。
 
 **测试重点**（xUnit v3 + Avalonia.Headless.XUnit）：info.json 解析与校验、.cfg 解析/写回保真、事务引擎回滚、sha256 校验、路径穿越拒绝、类型策略落位。
 
@@ -304,7 +314,7 @@ interface IModTypeStrategy
 
 ## 13. 风险与开放项
 
-1. 站上 BepInEx pack 的实际内容**仍需实机核对**；exe/Data 命名已实机核对（2026-09-09）：
+1. 站上 BepInEx pack 的实际内容**已实机核对**（2026-09-09）；exe/Data 命名同批核对：
    public build `24952802`、Windows 64 位 depot `674945`；安装目录 `StickFightTheGame`、
    exe `StickFight.exe`、数据目录 `StickFight_Data`（**目录名 ≠ exe 名，别按 installdir 推**）；
    该版本 Managed 里是 `UnityEngine.dll`（无 `UnityEngine.CoreModule.dll`），也没有 `data.unity3d`；
@@ -315,9 +325,72 @@ interface IModTypeStrategy
    `BepInEx 5.4.23.5` + `Bits64` + `Chainloader startup complete` 即成功（Unity 版本实测 5.6.7）；
 2. 静态更新目录的**主机/路径/上传凭据**待定（建议与 mod CI 的 SFTP 同源）；
 3. 官方构建指纹表的**生成与维护流程**（需持有游戏的账号跑 DepotDownloader）；
-4. 站上 **guest 写权限建议收紧**（安全）；
+4. ~~站上 guest 写权限~~ → **已核实为无写权限**（2026-10-11，见 §5 第 8 条）；但 `fs/list` 的 `write` 字段**不是**权限依据，别再用它判断；
 5. 便携版与 Velopack 自动更新不兼容（本规格书只做 Setup.exe）；
 6. FluentIcons 与 Serilog 的版本升级需回归（依赖精确锁定）。
+
+---
+
+## 14. 跨平台支持（macOS / Linux）
+
+- 状态：事实已取证（2026-10-11），实现属 §12 **M8**；证据与出处见 `docs/wayfinder/research/14-platform-support.md`
+
+**平台矩阵（结论）**：
+
+| | 游戏本体 | BepInEx 托管插件 | UVFS |
+|---|---|---|---|
+| Windows x64 | PE（现状） | ✅ | ✅（⚠️ x64 未验证，见下） |
+| Linux / SteamOS | Steam **无 linux 启动项** → Proton 跑 Windows 构建 | ✅ 同一份 dll，**不需要重新编译**（需 `winhttp` DLL override） | ⚠️ 待实测（PE dll + MinHook 钩 Wine 的 ntdll/kernel32） |
+| macOS | **原生 Mach-O**（`StickFight.app`，x86_64，Apple Silicon 走 Rosetta 2） | ⚠️ BepInEx 有官方 `macos_universal` 包，需实机验证 | ❌ **不可能**（PE dll 进不了 Mach-O；要支持须把 native 层重写为 fishhook/DYLD 注入） |
+
+**已核实的一手事实**：
+
+- Steam app_info `common.oslist = "windows,macos"`（**不含 linux**）；`config.launch` 只有 `StickFight.exe`（windows）与 `StickFight.app/Contents/MacOS/StickFight`（macos）两条
+- depot：`674945` windows x64（≈ 当前指纹 build `24952802`）、`674944` macos x64；`674943` 是 linux 构建**但既无启动项也不在 oslist**（疑为弃用，不作为设计依据）
+- BepInEx 5.4.23.5 官方资产含 `linux_x86/x64` 与 `macos_universal`；要求 Unity 3+ **Mono**（我们是 5.6.7 Mono，满足）；原生 Unix 游戏必须经 `run_bepinex.sh` 启动（`chmod u+x` + Steam 启动选项 `./run_bepinex.sh %command%`）
+- UVFS native（`E:\codes\UVFS`）是 Windows 独占：`windows.h` + MinHook 钩 `ntdll!NtCreateFile` 等；且 **v1 只在 x86 / Unity 5.6.4 验证过**，而线上是 **x64 / Unity 5.6.7** → 站上虽然还没有 UVFS mod，但 UVFS 的 x64 形态**尚未验证**（x64 目标在 CMake 工程里存在）
+
+**对 mod 作者的含义**：**不需要为 Linux 编译任何东西**（Proton = Windows 环境）；macOS 是否要单独编译取决于插件是否平台相关（托管插件理论跨平台，但引用的是 mac 版 `Assembly-CSharp.dll`/`UnityEngine.dll`，且 P/Invoke Windows API 或按平台条件编译的会挂）。
+
+**契约变更**：`info.json` 增可选 `platforms`（§4.2），缺省 `["windows"]`；不匹配当前平台的 mod 在客户端**置灰 + 说明**，不进安装流程。
+
+**客户端缺口**（代码级，细节见调研 §5）：非 Windows 的 Steam 根探测（`~/.steam/steam`、`~/.local/share/Steam`、`~/Library/Application Support/Steam`）、大小写敏感文件系统下的本地路径比较、启动方式（`xdg-open`/`open` `steam://rungameid/674940`）、macOS 的 BepInEx 包清单与指纹表、macOS 分发需**签名 + 公证**。
+
+**待人工实测**（没有 mac / linux 机器做不了）：macOS 装 BepInEx 并跑通一个现有插件；macOS 的 Unity 版本；Linux/Proton 的 `winhttp` override；UVFS 在 Wine 下的 MinHook；Windows 下 UVFS x64。
+
+---
+
+## 15. 站点发布侧（上传服务）
+
+- 状态：站长决策已定（2026-10-11），实现属 §12 **M7**；契约取证见 `docs/wayfinder/research/15-mod-publishing.md`
+- 目标：modder 不再手写 `info.json`、不再手动传文件；元数据由服务端从 **dll 内嵌 `BepInPlugin`**（Mono.Cecil）与 **readme** 派生，版本号由服务端裁决
+
+| 项 | 决定 |
+|---|---|
+| 入口 | `https://mod.monblog.top/upload` |
+| 同版本冲突 | **一律打回**（不做自动升版、不做覆盖） |
+| 通道 | 双通道：网页上传（主线）+ CI / API token（会用 git 的人） |
+| 账号 | 站长手动开号；自助注册暂不做 |
+| 托管 | 与 OpenList / Caddy 同机，Caddy 反代 |
+
+**服务端校验（全部在服务端做，不信上传者）**：
+
+1. `guid` / `name` / `version` 从 dll 内嵌 `BepInPlugin` 读；`author` / `description` / 更新日志从 readme 解析（§4.4）
+2. 三方比对：dll 内嵌版本 == 提交声明版本；站上该 mod 的版本必须**严格递增**
+3. 同版本号已存在 → **打回**：sha256 相同提示「内容未变，无需重发」，不同提示「版本号已被占用，请升版本后重传」
+4. 逐文件 sha256 写进 info.json；zip 解包做 zip-slip 与 zip 炸弹防护；UVFS 覆盖层只允许 `data/`、`bundles/`
+
+**发布流程**：staging 目录上传 → 校验 → 回显待写入的 info.json 预览 → 文件落 `<mod id>/` → **最后**写 `info.json`（`.tmp` + 改名；**它就是提交点**，在它落盘前玩家看到的仍是旧版本）→ 审计留痕 → 返回可分享链接。
+
+**组合包（同时需要 BepInEx + UVFS 的 mod）**：一个 zip 里同时含 dll 与 overlay 资源时，服务端**拆成两条站上条目**（`type=bepinex` + `type=uvfs`，后者 `dependencies: [{id, minVersion}]`），两份 info.json 同一提交内一起写、任一失败全回滚、版本号一起递增。理由：`type` 决定落位根，一条目只能有一个 type；拆开还能让资源包独立更新；客户端已有依赖检查（§7），玩家侧无感。
+
+**鉴权（一手取证）**：
+
+- ✅ 复用 OpenList 的**用户表 + 权限位模型**做身份源（`POST /api/admin/user/create` 存在；用户带 `base_path` 与权限位）
+- ❌ **不复用 OpenList 登录 token 当发布/CI 凭据**：它是 `ExpiresAt = now + token_expires_in 小时` 的 JWT（`server/common/auth.go`）、claim 无 scope、权限即账号权限位
+- 因此：服务**自签 token**（存哈希、可撤销、可限定到某个 mod id）；服务端持**唯一一个**高权限 OpenList 凭据写站；modder 的 OpenList 账号只给读权限
+
+**开放项**：① 传输用 `fs/put` 还是 `fs/form`；② `fs/rename` 能否用于**目录**（原子切换的前提，须站上实测）；③ 服务框架 **ASP.NET Core**（复用 Lunaqua 的 SemVer / info.json / 校验代码，需回工单 13 追加一笔）。
 
 ---
 
@@ -337,6 +410,8 @@ interface IModTypeStrategy
 | 决策：配置编辑器 | `tickets/12-config-editor.md` |
 | 决策：技术栈与依赖清单 | `tickets/13-tech-stack.md` |
 | 补录：存量 9 个 mod 的 info.json | `tickets/10-legacy-backfill.md`（待办） |
+| 调研：macOS / Linux 平台支持 | `research/14-platform-support.md`（+ 本规格书 §14） |
+| 调研：mod 发布链路（上传页 + CI） | `research/15-mod-publishing.md`（+ 本规格书 §15） |
 
 ## 附录 B：资产
 
